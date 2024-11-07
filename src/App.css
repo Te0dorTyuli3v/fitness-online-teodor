@@ -36,3 +36,106 @@
     transform: rotate(360deg);
   }
 }
+
+/* Основни стилове */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Стилизация за навигационната лента */
+/* Стилизация за навигационната лента */
+nav {
+  background-color: #2e7d32;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+nav h2 {
+  margin: 0;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+nav ul li a {
+  color: white; /* Ярък бял цвят за контраст */
+  background-color: #39933f; /* Тъмен зелен фон за контраст */
+  padding: 0.5rem 1rem; /* Добавя малко пространство около текста */
+  border-radius: 5px; /* Заоблени краища за по-добър вид */
+  text-decoration: none;
+}
+
+nav ul li a:hover {
+  background-color: #388e3c; /* По-светъл зелен цвят при задържане */
+  color: #ffffff;
+}
+
+/* Стилизация за съдържанието */
+.App {
+  padding: 2rem;
+  color: #333;
+}
+
+/* Списък с тренировки */
+ul {
+  padding: 0;
+}
+
+ul li {
+  background-color: #cbe7cd;
+  border: 1px solid #a5d6a7;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+}
+
+ul li h4 {
+  margin: 0;
+  color: #2e7d32;
+}
+
+/* Форма за добавяне на тренировка */
+form {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 5px;
+  border: 1px solid #c8e6c9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.304);
+}
+
+form h3 {
+  color: #2e7d32;
+}
+
+form input[type="text"] {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border: 1px solid #a5d6a7;
+  border-radius: 3px;
+}
+
+form button {
+  background-color: #499c4d;
+  color: rgb(219, 239, 230);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #1b5e20;
+}
+
