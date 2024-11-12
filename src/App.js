@@ -4,8 +4,9 @@ import Navbar from './components/Navbar';
 import WorkoutList from './components/WorkoutList';
 import AddWorkout from './components/AddWorkout';
 import Home from './components/Home';
+import WorkoutPlans from './components/WorkoutPlans';
+import DailyWorkouts from './components/DailyWorkouts';
 import './App.css';
-
 
 function App() {
   const [workouts, setWorkouts] = useState([
@@ -20,6 +21,9 @@ function App() {
     ]);
   };
 
+  // Състояние за избор на тренировъчен план
+  const [selectedPlanId, setSelectedPlanId] = useState(null);
+
   return (
     <Router>
       <div className="App">
@@ -28,6 +32,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/workouts" element={<WorkoutList workouts={workouts} />} />
           <Route path="/add" element={<AddWorkout onAddWorkout={addWorkout} />} />
+          
+          {/* Добавяне на нови маршрути за тренировъчни планове */}
+          <Route path="/plans" element={<WorkoutPlans onSelectPlan={setSelectedPlanId} />} />
+          <Route path="/plans/:id" element={<DailyWorkouts planId={selectedPlanId} />} />
         </Routes>
       </div>
     </Router>
