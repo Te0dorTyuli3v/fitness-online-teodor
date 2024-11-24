@@ -1,14 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import './Navbar.css'; // Увери се, че импортваш правилния CSS файл
 
 function Navbar() {
   return (
-    <nav>
-      <h2>Фитнес Онлайн Теодор</h2>
-      <ul>
-        <li><Link to="/">Начало</Link></li>
-        <li><Link to="/workouts">Списък с Тренировки</Link></li>
-        <li><Link to="/add">Добави Тренировка</Link></li>
+    <nav className="navbar">
+      <h2 className="navbar-title">My Progress Guru</h2>
+      <ul className="navbar-list">
+        <li><Link className="navbar-link" to="/">Начало</Link></li>
+        <li><Link className="navbar-link" to="/workouts">Списък с Тренировки</Link></li>
+        <li><Link className="navbar-link" to="/add">Добави Тренировка</Link></li>
+        <li><Link className="navbar-button" to="/login">Вход</Link></li> {/* Линк към login страницата */}
       </ul>
     </nav>
   );

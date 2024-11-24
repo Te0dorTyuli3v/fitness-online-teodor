@@ -1,0 +1,63 @@
+.login-container {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     height: 100vh; /* Центрира компонента вертикално */
+     background-color: #f4f4f9;
+     font-family: Arial, sans-serif;
+   }
+   
+   .login-form {
+     background-color: #ffffff;
+     padding: 20px 30px;
+     border-radius: 8px;
+     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+     max-width: 400px;
+     width: 100%;
+     text-align: center;
+   }
+   
+   .login-form h3 {
+     font-size: 1.8em;
+     color: #333;
+     margin-bottom: 20px;
+   }
+   
+   .login-form input {
+     width: 100%;
+     padding: 10px;
+     margin: 10px 0;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     font-size: 1em;
+   }
+   
+   .login-form button {
+     width: 100%;
+     padding: 10px;
+     margin: 10px 0;
+     background-color: #4caf50;
+     color: #ffffff;
+     border: none;
+     border-radius: 4px;
+     font-size: 1em;
+     cursor: pointer;
+     transition: background-color 0.3s ease;
+   }
+   
+   .login-form button:hover {
+     background-color: #45a049;
+   }
+   
+   .login-form p {
+     color: #555;
+     font-size: 0.9em;
+   }
+   
+   .message {
+     color: #d32f2f; /* Червен текст за грешка */
+     font-size: 0.9em;
+     margin-top: 10px;
+   }
+   
