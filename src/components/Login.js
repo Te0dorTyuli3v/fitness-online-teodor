@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabase';
-import './Login.css'; // Импортиране на CSS стиловете
+import './Login.css'; // Импортиране на стиловете
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -21,24 +21,10 @@ function Login() {
     }
   };
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (error) {
-      setMessage(`Грешка при регистрация: ${error.message}`);
-    } else {
-      setMessage('Регистрацията е успешна! Моля, влезте в профила си.');
-    }
-  };
-
   return (
     <div className="login-container">
-      <form className="login-form">
-        <h3>Вход или Регистрация</h3>
+      <form className="login-form" onSubmit={handleLogin}>
+        <h3>Вход</h3>
         <input
           type="email"
           placeholder="Имейл"
@@ -51,8 +37,7 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={handleLogin}>Вход</button>
-        <button onClick={handleSignup}>Регистрация</button>
+        <button type="submit">Вход</button>
         {message && <p className="message">{message}</p>}
       </form>
     </div>
@@ -60,3 +45,5 @@ function Login() {
 }
 
 export default Login;
+
+

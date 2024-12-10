@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabase'; // Увери се, че Supabase е правилно конфигуриран
-import './Register.css'; // Импортирай CSS стилове, ако имаш
+import './Register.css'; // Импортирани CSS стилове
 
 function Register() {
   const [email, setEmail] = useState('');
