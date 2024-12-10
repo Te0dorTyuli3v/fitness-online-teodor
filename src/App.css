@@ -180,4 +180,16 @@ body {
   height: 100vh; /* Височината на екрана */
 }
 
+.homepage-title {
+  color: #d3d3d3; /* Бледо сиво */
+}
+
+.homepage-text {
+  color: #ffffff; /* Бял текст */
+}
+
+.homepage-paragraph {
+  color: #d3d3d3; /* Много бледо сиво */
+}
+
 

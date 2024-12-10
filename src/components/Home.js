@@ -23,11 +23,10 @@ function Home() {
 
   return (
     <div>
-      <h2>Добре дошли във "grep -r "grep -r "My Progress Guru" .
-      " .
-      "</h2>
-      <p>grep -r "grep -r "My Progress Guru" .
-      " .
+      <h2 style={{ color: '#d3d3d3' }}>Добре дошли в My Progress App</h2>
+
+      <p style={{ color: '#d3d3d3' }}>My Progress App
+      
       е приложение, което ви помага да следите и организирате тренировките си, като предоставя персонализирани тренировъчни планове и прогрес.</p>
 
       {/* Показване на изображението, ако има данни */}
