@@ -10,7 +10,7 @@ import HomeIcon from './HomeIcon';
 function Navbar() {
   return (
     <nav className="navbar">
-      <h2 className="navbar-title">My Progress Guru</h2>
+      <h2 className="navbar-title">My Progress App</h2>
       <ul className="navbar-list">
       <li>
     <Link className="navbar-link" to="/">
