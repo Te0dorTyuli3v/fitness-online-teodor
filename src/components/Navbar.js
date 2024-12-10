@@ -11,6 +11,7 @@ function Navbar() {
         <li><Link className="navbar-link" to="/workouts">Списък с Тренировки</Link></li>
         <li><Link className="navbar-link" to="/add">Добави Тренировка</Link></li>
         <li><Link className="navbar-button" to="/login">Вход</Link></li> {/* Линк към login страницата */}
+        <li><Link className="navbar-link" to="/register">Регистрация</Link></li>
       </ul>
     </nav>
   );
