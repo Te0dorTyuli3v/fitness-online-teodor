@@ -7,6 +7,7 @@ import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import HomeIcon from './HomeIcon';
 
+
 function Navbar() {
   return (
     <nav className="navbar">
@@ -40,7 +41,7 @@ function Navbar() {
         <li>
           <Link className="navbar-link" to="/register">
             Регистрация
-          </Link>
+          </Link>        
         </li>
       </ul>
     </nav>

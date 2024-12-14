@@ -9,7 +9,7 @@ import DailyWorkouts from './components/DailyWorkouts';
 import './App.css';
 import Login from './components/Login';
 import Register from './components/Register';
-
+import ChangePassword from './components/ChangePassword';
 
 function App() {
   const [workouts, setWorkouts] = useState([
@@ -39,7 +39,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           {/* Добавяне на нови маршрути за тренировъчни планове */}
           <Route path="/plans" element={<WorkoutPlans onSelectPlan={setSelectedPlanId} />} />
-          <Route path="/plans/:id" element={<DailyWorkouts planId={selectedPlanId} />} />
+          <Route path="/plans/:id" element={<DailyWorkouts planId={selectedPlanId} />} /> 
+          <Route path="/change-password" element={<ChangePassword />} />         
         </Routes>
       </div>
     </Router>
