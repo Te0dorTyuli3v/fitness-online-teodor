@@ -33,6 +33,7 @@
    
    .navbar-link:hover {
     color: #ccc; /* Леко сиво при задържане */
+    border-radius: 4px;
    }
    
    /* Стилове за бутона "Вход" */

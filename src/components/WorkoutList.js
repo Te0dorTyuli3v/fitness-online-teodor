@@ -1,48 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../supabase';
+import React from 'react';
+import './WorkoutList.css'; // Увери се, че добавяш стилизиращ файл
 
-function WorkoutList() {
-  const [workouts, setWorkouts] = useState([]);
-
-  useEffect(() => {
-    const fetchWorkouts = async () => {
-      const { data, error } = await supabase
-        .from('workouts')
-        .select('*');
-      if (error) console.log('Error fetching workouts:', error);
-      else setWorkouts(data);
-    };
-
-    fetchWorkouts();
-  }, []);
-
+const WorkoutList = ({ workouts, onClose }) => {
   return (
-    <div>
-      <h3>Твоите Тренировки</h3>
-      {workouts.length > 0 ? (
-        <ul>
-          {workouts.map((workout) => (
-            <li key={workout.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
-              <div style={{ flex: 1 }}>
-                <h4>{workout.name}</h4>
-                <p>{workout.description}</p>
-                <p>Продължителност: {workout.duration}</p>
-              </div>
-              {workout.image_url && (
-                <img
-                  src={workout.image_url}
-                  alt={workout.name}
-                  style={{ width: '150px', height: '100px', marginLeft: '15px', borderRadius: '8px' }}
-                />
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>Все още няма добавени тренировки.</p>
-      )}
+    <div className="workout-list-overlay">
+      <div className="workout-list-container">
+        <button className="workout-list-close" onClick={onClose}>
+          &times;
+        </button>
+        <h3 className="workout-list-title">Тренировка 1</h3>
+        <table className="workout-list-table">
+          <thead>
+            <tr>
+              <th>№</th>
+              <th>Упражнение</th>
+              <th>Повт</th>
+              <th>Серии</th>
+            </tr>
+          </thead>
+          <tbody>
+            {workouts.map((workout, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{workout.name}</td>
+                <td>{workout.reps}</td>
+                <td>{workout.sets}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button className="start-workout-button">Започни тренировка</button>
+      </div>
     </div>
   );
-}
+};
 
 export default WorkoutList;

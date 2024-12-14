@@ -55,7 +55,7 @@ nav {
   align-items: center;
   color: white !important;
   border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px rgba(10, 10, 10, 0.2);
 }
 
 
@@ -73,7 +73,7 @@ nav ul {
 
 nav ul li a {
   color: white !important;
-  background-color: #808080 !important; /* Средно сиво */
+  background-color: #6c5353 !important; /* Средно сиво */
   padding: 0.5rem 1rem;
   border-radius: 5px;
   text-decoration: none;
@@ -82,7 +82,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-  background-color: #666666 !important; /* По-тъмно сиво */
+  background-color: #5d5b5b !important; /* По-тъмно сиво */
   color: #ffffff !important;
 }
 
@@ -110,7 +110,7 @@ ul li {
 
 ul li h4 {
   margin: 0;
-  color: #333333; /* Тъмно сиво */
+  color: #363535; /* Тъмно сиво */
 }
 
 ul li h4, ul li p, form h3 {
@@ -181,7 +181,7 @@ body {
 }
 
 .homepage-title {
-  color: #aeaaaa; /* Бледо сиво */
+  color: #9a9797; /* Бледо сиво */
 }
 
 .homepage-text {
@@ -197,11 +197,11 @@ body {
   font-family: Arial, sans-serif;
   font-size: 1.2rem; /* Размер на текста */
   font-weight: bold; /* Удебелен текст */
-  color: rgb(249, 246, 246);
+  color: rgb(121, 15, 15);
   margin: 20px;
   padding: 20px;
-  background: rgba(91, 89, 89, 0.6); /* Полупрозрачен фон */
-  border-radius: 8px;
+  background: rgba(103, 98, 98, 0.6); /* Полупрозрачен фон */
+  border-radius: 16px;
 }
 
 .welcome-text h2 {
