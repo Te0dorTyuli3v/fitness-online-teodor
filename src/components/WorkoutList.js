@@ -1,15 +1,29 @@
-import React from 'react';
-import './WorkoutList.css'; // Увери се, че добавяш стилизиращ файл
+import React, { useState } from 'react';
+import './WorkoutList.css';
 
-const WorkoutList = ({ workouts, onClose }) => {
+function WorkoutList({ workouts, onClose }) {
+  const [currentWorkoutIndex, setCurrentWorkoutIndex] = useState(0);
+
+  const handleNextWorkout = () => {
+    setCurrentWorkoutIndex((prevIndex) => (prevIndex + 1) % workouts.length);
+  };
+
+  const handlePreviousWorkout = () => {
+    setCurrentWorkoutIndex((prevIndex) =>
+      prevIndex === 0 ? workouts.length - 1 : prevIndex - 1
+    );
+  };
+
   return (
-    <div className="workout-list-overlay">
-      <div className="workout-list-container">
-        <button className="workout-list-close" onClick={onClose}>
-          &times;
-        </button>
-        <h3 className="workout-list-title">Тренировка 1</h3>
-        <table className="workout-list-table">
+    <>
+      {/* Фонова маска */}
+      <div className="modal-backdrop" onClick={onClose}></div>
+
+      {/* Прозорец за тренировките */}
+      <div className="workout-modal">
+        <button className="close-button" onClick={onClose}>X</button>
+        <h2>{workouts[currentWorkoutIndex].title}</h2>
+        <table>
           <thead>
             <tr>
               <th>№</th>
@@ -19,20 +33,27 @@ const WorkoutList = ({ workouts, onClose }) => {
             </tr>
           </thead>
           <tbody>
-            {workouts.map((workout, index) => (
+            {workouts[currentWorkoutIndex].exercises.map((exercise, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{workout.name}</td>
-                <td>{workout.reps}</td>
-                <td>{workout.sets}</td>
+                <td>{exercise.name}</td>
+                <td>{exercise.reps}</td>
+                <td>{exercise.sets}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <button className="start-workout-button">Започни тренировка</button>
+        <div className="navigation-buttons">
+  <button onClick={handlePreviousWorkout}>⬅ Предишна</button>
+  <button onClick={handleNextWorkout}>Следваща ➡</button>
+</div>
+<button className="start-button" onClick={onClose}>
+  Започни тренировка
+</button>
+
       </div>
-    </div>
+    </>
   );
-};
+}
 
 export default WorkoutList;

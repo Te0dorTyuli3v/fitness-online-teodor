@@ -1,24 +1,37 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Navbar.css'; // Увери се, че импортваш правилния CSS файл
+import './Navbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDumbbell } from '@fortawesome/free-solid-svg-icons';
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
-import { faHome } from '@fortawesome/free-solid-svg-icons';
-import WorkoutList from './WorkoutList'; // Импортирай компонента с тренировките
-
+import { faCalendarAlt, faHome } from '@fortawesome/free-solid-svg-icons';
+import WorkoutList from './WorkoutList';
 
 function Navbar() {
   const [showWorkout, setShowWorkout] = useState(false);
 
-  // Примерен масив с данни за тренировките
   const workouts = [
-    { name: 'Клек', reps: '3-5', sets: 4 },
-    { name: 'Лежанка', reps: '4-6', sets: 4 },
-    { name: 'Вертикален скрипец', reps: '6-8', sets: 4 },
-    { name: 'Странично рамо с дъмбели', reps: '10-12', sets: 3 },
-    { name: 'Cable Triceps Pushdown', reps: '12-15', sets: 3 },
-    { name: 'Трапец с лост', reps: '10-12', sets: 3 },
+    {
+      title: 'Тренировка 1',
+      exercises: [
+        { name: 'Клек', reps: '3-5', sets: 4 },
+        { name: 'Лежанка', reps: '4-6', sets: 4 },
+        { name: 'Вертикален скрипец', reps: '6-8', sets: 4 },
+        { name: 'Странично рамо с дъмбели', reps: '10-12', sets: 3 },
+        { name: 'Cable Triceps Pushdown', reps: '12-15', sets: 3 },
+        { name: 'Трапец с лост', reps: '10-12', sets: 3 },
+      ],
+    },
+    {
+      title: 'Тренировка 2',
+      exercises: [
+        { name: 'Румънска тяга', reps: '4-6', sets: 3 },
+        { name: 'Български клек', reps: '6-8', sets: 3 },
+        { name: 'Горна лежанка', reps: '4-6', sets: 4 },
+        { name: 'Военна преса', reps: '4-6', sets: 4 },
+        { name: 'Чукове с дъмбел', reps: '6-8', sets: 4 },
+        { name: 'Трапец с лост', reps: '10-12', sets: 3 },
+      ],
+    },
   ];
 
   return (
@@ -62,19 +75,18 @@ function Navbar() {
         </ul>
       </nav>
 
-      {/* Показване на прозореца за тренировките */}
-{showWorkout && (
-  <>
-    <div className="modal-backdrop" onClick={() => setShowWorkout(false)}></div> {/* Затъмнен фон */}
-    <WorkoutList
-      workouts={workouts}
-      onClose={() => setShowWorkout(false)}
-    />
-  </>
-)}
-      
+      {showWorkout && (
+        <>
+          <div className="modal-backdrop" onClick={() => setShowWorkout(false)}></div>
+          <WorkoutList
+            workouts={workouts}
+            onClose={() => setShowWorkout(false)}
+          />
+        </>
+      )}
     </div>
   );
 }
 
 export default Navbar;
+
