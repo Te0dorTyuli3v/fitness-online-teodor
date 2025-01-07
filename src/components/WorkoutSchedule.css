@@ -22,14 +22,21 @@
    }
    
    .training-day {
-     background-color: #d32f2f !important;
-     color: white !important;
-   }
-   
-   .rest-day {
-     background-color: #fbc02d !important;
-     color: white !important;
-   }
+    background-color: #add381; 
+    color: white;
+  }
+  
+  .rest-day {
+    background-color: #cd7670; 
+    color: white;
+  }
+  
+  .react-calendar__tile--now {
+    background-color: #f2a0bd !important; 
+    color: black !important;
+    font-weight: bold;
+  }
+  
    
    .workout-graph {
      margin-top: 20px;

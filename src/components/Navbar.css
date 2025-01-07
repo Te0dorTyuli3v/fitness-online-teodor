@@ -23,18 +23,22 @@
 }
 
 .navbar-link {
+  display: inline-block;
+  padding: 8px 16px;
   color: white;
-  display: flex;
-  align-items: center;
+  background-color: #5d4037; /* Цвят за фона */
   text-decoration: none;
   font-size: 1em;
-  transition: color 0.3s ease;
+  border-radius: 5px; /* Заоблени ъгли */
+  border: 1px solid #4e342e; /* Тънка рамка */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .navbar-link:hover {
-  color: #ccc; /* Леко сиво при задържане */
-  border-radius: 4px;
+  background-color: #4e342e; /* По-тъмен фон при задържане */
+  color: #ccc; /* По-светъл цвят на текста */
 }
+
 
 .navbar-button {
   display: inline-block;

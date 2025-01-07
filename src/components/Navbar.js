@@ -48,7 +48,7 @@ function Navbar() {
           <li>
             <button
               className="navbar-link"
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'white' }}
+              style={{ cursor: 'pointer' }}
               onClick={() => setShowWorkout(true)}
             >
               <FontAwesomeIcon icon={faDumbbell} style={{ marginRight: '8px', color: 'white' }} />

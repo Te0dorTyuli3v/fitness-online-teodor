@@ -1,21 +1,26 @@
 import React from 'react';
 import Calendar from 'react-calendar'; // Уверете се, че сте инсталирали react-calendar: npm install react-calendar
 import 'react-calendar/dist/Calendar.css';
-import './WorkoutSchedule.css'; // Създайте стилове за компонента
-
-
+import './WorkoutSchedule.css';
 
 function WorkoutSchedule() {
-  const workouts = [
-    { date: new Date(2025, 0, 2), type: 'Тренировъчен ден' },
-    { date: new Date(2025, 0, 4), type: 'Почивен ден' },
-    { date: new Date(2025, 0, 6), type: 'Тренировъчен ден' },
-    { date: new Date(2025, 0, 8), type: 'Почивен ден' },
-    { date: new Date(2025, 0, 10), type: 'Тренировъчен ден' },
-    { date: new Date(2025, 0, 12), type: 'Почивен ден' },
-  ];
+  const generateWorkouts = () => {
+    const workouts = [];
+    const startDate = new Date(2025, 0, 1); // Начална дата (1 януари 2025)
+    const totalDays = 31; // Например за месец януари
+    for (let i = 0; i < totalDays; i++) {
+      const currentDate = new Date(startDate);
+      currentDate.setDate(startDate.getDate() + i);
+      workouts.push({
+        date: currentDate,
+        type: i % 2 === 0 ? 'Тренировъчен ден' : 'Почивен ден', // През ден тренировка
+      });
+    }
+    return workouts;
+  };
 
-  // Форматиране на дните в календара
+  const workouts = generateWorkouts();
+
   const tileClassName = ({ date, view }) => {
     if (view === 'month') {
       const workout = workouts.find(
@@ -38,7 +43,7 @@ function WorkoutSchedule() {
         <ul>
           {workouts.map((workout, index) => (
             <li key={index} className={workout.type === 'Тренировъчен ден' ? 'training-day' : 'rest-day'}>
-              {index + 1}. {workout.type}
+              {index + 1}. {workout.type} - {workout.date.toLocaleDateString()}
             </li>
           ))}
         </ul>
