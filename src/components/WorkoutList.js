@@ -1,18 +1,38 @@
 import React, { useState } from 'react';
 import './WorkoutList.css';
 
-function WorkoutList({ workouts, onClose }) {
+function WorkoutList({ workouts = [], onClose }) {
   const [currentWorkoutIndex, setCurrentWorkoutIndex] = useState(0);
 
   const handleNextWorkout = () => {
-    setCurrentWorkoutIndex((prevIndex) => (prevIndex + 1) % workouts.length);
+    if (workouts.length > 0) {
+      setCurrentWorkoutIndex((prevIndex) => (prevIndex + 1) % workouts.length);
+    }
   };
 
   const handlePreviousWorkout = () => {
-    setCurrentWorkoutIndex((prevIndex) =>
-      prevIndex === 0 ? workouts.length - 1 : prevIndex - 1
-    );
+    if (workouts.length > 0) {
+      setCurrentWorkoutIndex((prevIndex) =>
+        prevIndex === 0 ? workouts.length - 1 : prevIndex - 1
+      );
+    }
   };
+
+  // Ако няма тренировки, показваме fallback съобщение
+  if (!workouts || workouts.length === 0) {
+    return (
+      <>
+        <div className="modal-backdrop" onClick={onClose}></div>
+        <div className="workout-modal">
+          <button className="close-button" onClick={onClose}>X</button>
+          <h2>Няма налични тренировки</h2>
+          <button className="start-button" onClick={onClose}>
+            Затвори
+          </button>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -22,7 +42,7 @@ function WorkoutList({ workouts, onClose }) {
       {/* Прозорец за тренировките */}
       <div className="workout-modal">
         <button className="close-button" onClick={onClose}>X</button>
-        <h2>{workouts[currentWorkoutIndex].title}</h2>
+        <h2>{workouts[currentWorkoutIndex]?.title || "Тренировка"}</h2>
         <table>
           <thead>
             <tr>
@@ -33,24 +53,23 @@ function WorkoutList({ workouts, onClose }) {
             </tr>
           </thead>
           <tbody>
-            {workouts[currentWorkoutIndex].exercises.map((exercise, index) => (
+            {workouts[currentWorkoutIndex]?.exercises?.map((exercise, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{exercise.name}</td>
-                <td>{exercise.reps}</td>
-                <td>{exercise.sets}</td>
+                <td>{exercise.name || "Няма информация"}</td>
+                <td>{exercise.reps || "-"}</td>
+                <td>{exercise.sets || "-"}</td>
               </tr>
             ))}
           </tbody>
         </table>
         <div className="navigation-buttons">
-  <button onClick={handlePreviousWorkout}>⬅ Предишна</button>
-  <button onClick={handleNextWorkout}>Следваща ➡</button>
-</div>
-<button className="start-button" onClick={onClose}>
-  Започни тренировка
-</button>
-
+          <button onClick={handlePreviousWorkout}>⬅ Предишна</button>
+          <button onClick={handleNextWorkout}>Следваща ➡</button>
+        </div>
+        <button className="start-button" onClick={onClose}>
+          Започни тренировка
+        </button>
       </div>
     </>
   );

@@ -1,0 +1,61 @@
+.workout-schedule-container {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     background-color: rgba(255, 255, 255, 0.8);
+     border-radius: 10px;
+     padding: 20px;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+   }
+   
+   .workout-schedule-container h2 {
+     color: #333;
+     margin-bottom: 20px;
+   }
+   
+   .react-calendar {
+     width: 100%;
+     max-width: 400px;
+     border: none;
+     border-radius: 10px;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   }
+   
+   .training-day {
+     background-color: #d32f2f !important;
+     color: white !important;
+   }
+   
+   .rest-day {
+     background-color: #fbc02d !important;
+     color: white !important;
+   }
+   
+   .workout-graph {
+     margin-top: 20px;
+     width: 100%;
+     max-width: 400px;
+     text-align: left;
+   }
+   
+   .workout-graph ul {
+     list-style: none;
+     padding: 0;
+   }
+   
+   .workout-graph li {
+     padding: 10px;
+     border-bottom: 1px solid #ddd;
+     color: #333;
+   }
+   
+   .workout-graph li.training-day {
+     color: #d32f2f;
+     font-weight: bold;
+   }
+   
+   .workout-graph li.rest-day {
+     color: #fbc02d;
+     font-weight: bold;
+   }
+   

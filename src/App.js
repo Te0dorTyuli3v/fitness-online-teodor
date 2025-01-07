@@ -6,6 +6,7 @@ import AddWorkout from './components/AddWorkout';
 import Home from './components/Home';
 import WorkoutPlans from './components/WorkoutPlans';
 import DailyWorkouts from './components/DailyWorkouts';
+import WorkoutSchedule from './components/WorkoutSchedule'; // Импортирай компонента
 import './App.css';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -24,7 +25,6 @@ function App() {
     ]);
   };
 
-  // Състояние за избор на тренировъчен план
   const [selectedPlanId, setSelectedPlanId] = useState(null);
 
   return (
@@ -37,10 +37,10 @@ function App() {
           <Route path="/add" element={<AddWorkout onAddWorkout={addWorkout} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          {/* Добавяне на нови маршрути за тренировъчни планове */}
           <Route path="/plans" element={<WorkoutPlans onSelectPlan={setSelectedPlanId} />} />
-          <Route path="/plans/:id" element={<DailyWorkouts planId={selectedPlanId} />} /> 
-          <Route path="/change-password" element={<ChangePassword />} />         
+          <Route path="/plans/:id" element={<DailyWorkouts planId={selectedPlanId} />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/workout-schedule" element={<WorkoutSchedule />} /> {/* Нов маршрут */}          
         </Routes>
       </div>
     </Router>
@@ -48,3 +48,4 @@ function App() {
 }
 
 export default App;
+
