@@ -68,7 +68,7 @@ function WorkoutList({ workouts = [], onClose }) {
           <button onClick={handleNextWorkout}>Следваща ➡</button>
         </div>
         <button className="start-button" onClick={onClose}>
-          Започни тренировка
+          Добави тренировка
         </button>
       </div>
     </>

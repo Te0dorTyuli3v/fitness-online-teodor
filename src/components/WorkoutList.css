@@ -13,7 +13,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.95); /* Леко прозрачен бял фон */
+  background-color: rgba(255, 255, 255, 0.6); /* Леко прозрачен бял фон */
   padding: 20px;
   border-radius: 10px;
   z-index: 1000;

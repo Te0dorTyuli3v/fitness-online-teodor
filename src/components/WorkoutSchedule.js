@@ -1,5 +1,5 @@
 import React from 'react';
-import Calendar from 'react-calendar'; // Уверете се, че сте инсталирали react-calendar: npm install react-calendar
+import Calendar from 'react-calendar'; 
 import 'react-calendar/dist/Calendar.css';
 import './WorkoutSchedule.css';
 

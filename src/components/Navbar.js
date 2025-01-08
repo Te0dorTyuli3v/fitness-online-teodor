@@ -51,6 +51,13 @@ function Navbar() {
         <h2 className="navbar-title">My Progress App</h2>
         <ul className="navbar-list">
           <li>
+               <Link className="navbar-link" to="/">
+               <FontAwesomeIcon icon={faHome} style={{ marginRight: '8px', color: 'white' }} />
+               Начало
+               </Link>
+          </li>
+
+          <li>
                <Link className="navbar-link" to="/workout-schedule">
                <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight: '8px', color: 'white' }} />
                 Тренировъчен график
