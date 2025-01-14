@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../supabase';
 import './Login.css'; // CSS за стилизиране
 
-function Login() {
+function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -13,7 +13,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setMessage('');
-    const { error } = await supabase.auth.signInWithPassword({
+    const { user, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -22,6 +22,7 @@ function Login() {
       setMessage(`Грешка при влизане: ${error.message}`);
     } else {
       setMessage('Успешно влизане!');
+      onLoginSuccess(user); // Уведомяване за успешен вход
     }
   };
 

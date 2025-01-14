@@ -56,3 +56,17 @@
 .navbar-button:hover {
   background-color: #e2552a; /* По-тъмен оранжев цвят */
 }
+
+.logout-button {
+  background-color: #d32f2f; /* Червен фон */
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 1rem;
+  border: none;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #b71c1c; /* По-тъмен червен цвят */
+}

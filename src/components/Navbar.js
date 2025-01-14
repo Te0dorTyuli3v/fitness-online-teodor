@@ -1,13 +1,30 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDumbbell } from '@fortawesome/free-solid-svg-icons';
-import { faCalendarAlt, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faDumbbell, faCalendarAlt, faHome, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import WorkoutList from './WorkoutList';
+import { supabase } from '../supabase'; // Импортирайте Supabase
 
 function Navbar() {
   const [showWorkout, setShowWorkout] = useState(false);
+  const [user, setUser] = useState(null); // Управление на състоянието на потребителя
+  const navigate = useNavigate();
+
+  // Проверка за логнат потребител
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (data) {
+        setUser(data.user); // Задаваме user, ако е успешно извлечен
+      } else {
+        setUser(null);
+        console.error(error?.message || 'Потребителят не може да бъде извлечен');
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const workouts = [
     {
@@ -44,6 +61,16 @@ function Navbar() {
       ],
     },
   ];
+  
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut(); // Изход от Supabase
+    if (!error) {
+      setUser(null);
+      navigate('/login'); // Пренасочване към страницата за вход
+    } else {
+      console.error('Грешка при изход:', error.message);
+    }
+  };
 
   return (
     <div>
@@ -51,18 +78,17 @@ function Navbar() {
         <h2 className="navbar-title">My Progress App</h2>
         <ul className="navbar-list">
           <li>
-               <Link className="navbar-link" to="/">
-               <FontAwesomeIcon icon={faHome} style={{ marginRight: '8px', color: 'white' }} />
-               Начало
-               </Link>
+            <Link className="navbar-link" to="/">
+              <FontAwesomeIcon icon={faHome} style={{ marginRight: '8px', color: 'white' }} />
+              Начало
+            </Link>
           </li>
-
           <li>
-               <Link className="navbar-link" to="/workout-schedule">
-               <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight: '8px', color: 'white' }} />
-                Тренировъчен график
-               </Link>
-          </li>          
+            <Link className="navbar-link" to="/workout-schedule">
+              <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight: '8px', color: 'white' }} />
+              Тренировъчен график
+            </Link>
+          </li>
           <li>
             <button
               className="navbar-link"
@@ -73,16 +99,31 @@ function Navbar() {
               Тренировки
             </button>
           </li>
-          <li>
-            <Link className="navbar-button" to="/login">
-              Вход
-            </Link>
-          </li>
-          <li>
-            <Link className="navbar-link" to="/register">
-              Регистрация
-            </Link>
-          </li>
+          {user ? (
+            <li>
+              <button
+                className="navbar-link logout-button"
+                style={{ cursor: 'pointer', color: 'white' }}
+                onClick={handleLogout}
+              >
+                <FontAwesomeIcon icon={faSignOutAlt} style={{ marginRight: '8px', color: 'white' }} />
+                Изход
+              </button>
+            </li>
+          ) : (
+            <>
+              <li>
+                <Link className="navbar-link" to="/login">
+                  Вход
+                </Link>
+              </li>
+              <li>
+                <Link className="navbar-link" to="/register">
+                  Регистрация
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </nav>
 
@@ -100,4 +141,5 @@ function Navbar() {
 }
 
 export default Navbar;
+
 
