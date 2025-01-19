@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabase';
-import './Login.css'; // CSS за стилизиране
+import './Login.css';
 
 function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [showChangePassword, setShowChangePassword] = useState(false); // Управление на формуляра за смяна на парола
-  const [newPassword, setNewPassword] = useState(''); // Поле за новата парола
+  const [isRegistering, setIsRegistering] = useState(false); // Състояние за превключване между вход и регистрация
 
-  // Функция за вход
   const handleLogin = async (e) => {
     e.preventDefault();
     setMessage('');
@@ -26,74 +24,82 @@ function Login({ onLoginSuccess }) {
     }
   };
 
-  // Функция за смяна на паролата
-  const handlePasswordChange = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     setMessage('');
-
-    if (!newPassword) {
-      setMessage('Моля, въведете нова парола.');
-      return;
-    }
-
-    const { error } = await supabase.auth.updateUser({
-      password: newPassword,
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
     });
 
     if (error) {
-      setMessage(`Грешка при смяна на паролата: ${error.message}`);
+      setMessage(`Грешка при регистрация: ${error.message}`);
     } else {
-      setMessage('Паролата е променена успешно!');
-      setShowChangePassword(false); // Скриване на формуляра след успешна промяна
+      setMessage('Регистрацията е успешна! Моля, влезте в профила си.');
+      setIsRegistering(false); // Връщане към формата за вход
     }
   };
 
   return (
     <div className="login-container">
-      <form className="login-form" onSubmit={handleLogin}>
-        <h3>Вход</h3>
-        <input
-          type="email"
-          placeholder="Имейл"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Парола"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Вход</button>
-      </form>
-
-      {/* Съобщение за потребителя */}
-      {message && <p className="message">{message}</p>}
-
-      {/* Бутон за смяна на паролата */}
-      <button
-        className="change-password-button"
-        onClick={() => setShowChangePassword(!showChangePassword)}
-      >
-        Смяна на паролата
-      </button>
-
-      {/* Форма за смяна на паролата */}
-      {showChangePassword && (
-        <form className="change-password-form" onSubmit={handlePasswordChange}>
-          <h3>Смяна на паролата</h3>
+      {!isRegistering ? (
+        <form className="login-form" onSubmit={handleLogin}>
+          <h3>Вход</h3>
           <input
-            type="password"
-            placeholder="Нова парола"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
+            type="email"
+            placeholder="Имейл"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <button type="submit">Промени паролата</button>
+          <input
+            type="password"
+            placeholder="Парола"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Вход</button>
+          <p>
+            Нямате профил?{' '}
+            <span
+              className="toggle-link"
+              onClick={() => setIsRegistering(true)}
+            >
+              Регистрирайте се
+            </span>
+          </p>
+        </form>
+      ) : (
+        <form className="login-form" onSubmit={handleSignup}>
+          <h3>Регистрация</h3>
+          <input
+            type="email"
+            placeholder="Имейл"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Парола"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Регистрирай се</button>
+          <p>
+            Вече имате профил?{' '}
+            <span
+              className="toggle-link"
+              onClick={() => setIsRegistering(false)}
+            >
+              Влезте
+            </span>
+          </p>
         </form>
       )}
+      {message && <p className="message">{message}</p>}
     </div>
   );
 }
