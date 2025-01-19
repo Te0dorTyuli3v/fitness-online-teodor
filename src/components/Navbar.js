@@ -11,22 +11,8 @@ function Navbar() {
   const [user, setUser] = useState(null); // Управление на състоянието на потребителя
   const navigate = useNavigate();
 
-  // Проверка за логнат потребител
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (data) {
-        setUser(data.user); // Задаваме user, ако е успешно извлечен
-      } else {
-        setUser(null);
-        console.error(error?.message || 'Потребителят не може да бъде извлечен');
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-  const workouts = [
+  // Списък с тренировки
+  const [workouts, setWorkouts] = useState([
     {
       title: 'Тренировка 1',
       exercises: [
@@ -60,13 +46,29 @@ function Navbar() {
         { name: 'Трапец с лост', reps: '10-12', sets: 3 },
       ],
     },
-  ];
-  
+  ]);
+
+  // Проверка за логнат потребител
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (data) {
+        setUser(data.user); // Записване на информация за потребителя
+      } else {
+        setUser(null);
+        console.error(error?.message || 'Потребителят не може да бъде извлечен');
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  // Изход от приложението
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut(); // Изход от Supabase
+    const { error } = await supabase.auth.signOut();
     if (!error) {
       setUser(null);
-      navigate('/login'); // Пренасочване към страницата за вход
+      navigate('/login');
     } else {
       console.error('Грешка при изход:', error.message);
     }
@@ -100,16 +102,23 @@ function Navbar() {
             </button>
           </li>
           {user ? (
-            <li>
-              <button
-                className="navbar-link logout-button"
-                style={{ cursor: 'pointer', color: 'white' }}
-                onClick={handleLogout}
-              >
-                <FontAwesomeIcon icon={faSignOutAlt} style={{ marginRight: '8px', color: 'white' }} />
-                Изход
-              </button>
-            </li>
+            <>
+              <li>
+                <span className="navbar-user">
+                  Добре дошли, {user.email || 'Потребител'}!
+                </span>
+              </li>
+              <li>
+                <button
+                  className="navbar-link logout-button"
+                  style={{ cursor: 'pointer', color: 'white' }}
+                  onClick={handleLogout}
+                >
+                  <FontAwesomeIcon icon={faSignOutAlt} style={{ marginRight: '8px', color: 'white' }} />
+                  Изход
+                </button>
+              </li>
+            </>
           ) : (
             <>
               <li>
@@ -128,18 +137,16 @@ function Navbar() {
       </nav>
 
       {showWorkout && (
-        <>
-          <div className="modal-backdrop" onClick={() => setShowWorkout(false)}></div>
-          <WorkoutList
-            workouts={workouts}
-            onClose={() => setShowWorkout(false)}
-          />
-        </>
+        <WorkoutList
+          workouts={workouts}
+          onClose={() => setShowWorkout(false)}
+        />
       )}
     </div>
   );
 }
 
 export default Navbar;
+
 
 

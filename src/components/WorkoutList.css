@@ -71,3 +71,18 @@
 .navigation-buttons button:hover {
   background-color: #8e0000; /* По-тъмен тъмно червен */
 }
+
+.edit-button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.edit-button:hover {
+  background-color: #bc6060;
+}
+

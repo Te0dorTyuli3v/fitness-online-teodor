@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './WorkoutList.css';
 
-function WorkoutList({ workouts = [], onClose }) {
+function WorkoutList({ workouts = [], onClose, onReplaceWorkout }) {
   const [currentWorkoutIndex, setCurrentWorkoutIndex] = useState(0);
+  const [editMode, setEditMode] = useState(false);
+  const [editedWorkout, setEditedWorkout] = useState(null);
 
   const handleNextWorkout = () => {
     if (workouts.length > 0) {
@@ -18,7 +20,35 @@ function WorkoutList({ workouts = [], onClose }) {
     }
   };
 
-  // Ако няма тренировки, показваме fallback съобщение
+  const startEditWorkout = () => {
+    setEditMode(true);
+    setEditedWorkout({ ...workouts[currentWorkoutIndex] });
+  };
+
+  const handleWorkoutChange = (field, value) => {
+    setEditedWorkout((prevWorkout) => ({
+      ...prevWorkout,
+      [field]: value,
+    }));
+  };
+
+  const handleExerciseChange = (index, field, value) => {
+    setEditedWorkout((prevWorkout) => {
+      const updatedExercises = [...prevWorkout.exercises];
+      updatedExercises[index] = {
+        ...updatedExercises[index],
+        [field]: value,
+      };
+      return { ...prevWorkout, exercises: updatedExercises };
+    });
+  };
+
+  const saveEditedWorkout = () => {
+    onReplaceWorkout(currentWorkoutIndex, editedWorkout);
+    setEditMode(false);
+    setEditedWorkout(null);
+  };
+
   if (!workouts || workouts.length === 0) {
     return (
       <>
@@ -26,9 +56,6 @@ function WorkoutList({ workouts = [], onClose }) {
         <div className="workout-modal">
           <button className="close-button" onClick={onClose}>X</button>
           <h2>Няма налични тренировки</h2>
-          <button className="start-button" onClick={onClose}>
-            Затвори
-          </button>
         </div>
       </>
     );
@@ -36,40 +63,92 @@ function WorkoutList({ workouts = [], onClose }) {
 
   return (
     <>
-      {/* Фонова маска */}
       <div className="modal-backdrop" onClick={onClose}></div>
-
-      {/* Прозорец за тренировките */}
       <div className="workout-modal">
         <button className="close-button" onClick={onClose}>X</button>
-        <h2>{workouts[currentWorkoutIndex]?.title || "Тренировка"}</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>№</th>
-              <th>Упражнение</th>
-              <th>Повт</th>
-              <th>Серии</th>
-            </tr>
-          </thead>
-          <tbody>
-            {workouts[currentWorkoutIndex]?.exercises?.map((exercise, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{exercise.name || "Няма информация"}</td>
-                <td>{exercise.reps || "-"}</td>
-                <td>{exercise.sets || "-"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="navigation-buttons">
-          <button onClick={handlePreviousWorkout}>⬅ Предишна</button>
-          <button onClick={handleNextWorkout}>Следваща ➡</button>
-        </div>
-        <button className="start-button" onClick={onClose}>
-          Добави тренировка
-        </button>
+        {!editMode ? (
+          <>
+            <h2>{workouts[currentWorkoutIndex]?.title || "Тренировка"}</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>№</th>
+                  <th>Упражнение</th>
+                  <th>Повт</th>
+                  <th>Серии</th>
+                </tr>
+              </thead>
+              <tbody>
+                {workouts[currentWorkoutIndex]?.exercises?.map((exercise, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{exercise.name || "Няма информация"}</td>
+                    <td>{exercise.reps || "-"}</td>
+                    <td>{exercise.sets || "-"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="navigation-buttons">
+              <button onClick={handlePreviousWorkout}>⬅ Предишна</button>
+              <button onClick={handleNextWorkout}>Следваща ➡</button>
+            </div>
+            <button className="edit-button" onClick={startEditWorkout}>
+              Редактирай
+            </button>
+          </>
+        ) : (
+          <>
+            <h2>Редакция на {editedWorkout?.title}</h2>
+            <input
+              type="text"
+              value={editedWorkout?.title || ""}
+              onChange={(e) => handleWorkoutChange("title", e.target.value)}
+              placeholder="Име на тренировката"
+            />
+            <table>
+              <thead>
+                <tr>
+                  <th>№</th>
+                  <th>Упражнение</th>
+                  <th>Повт</th>
+                  <th>Серии</th>
+                </tr>
+              </thead>
+              <tbody>
+                {editedWorkout?.exercises?.map((exercise, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>
+                      <input
+                        type="text"
+                        value={exercise.name || ""}
+                        onChange={(e) => handleExerciseChange(index, "name", e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        value={exercise.reps || ""}
+                        onChange={(e) => handleExerciseChange(index, "reps", e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        value={exercise.sets || ""}
+                        onChange={(e) => handleExerciseChange(index, "sets", e.target.value)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button className="save-button" onClick={saveEditedWorkout}>
+              Запази
+            </button>
+          </>
+        )}
       </div>
     </>
   );
