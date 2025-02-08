@@ -48,6 +48,15 @@ function Navbar() {
     },
   ]);
 
+  // Функция за замяна на тренировка
+  const replaceWorkout = (index, updatedWorkout) => {
+    setWorkouts((prevWorkouts) => {
+      const updatedWorkouts = [...prevWorkouts];
+      updatedWorkouts[index] = updatedWorkout; // Заместване на редактираната тренировка
+      return updatedWorkouts;
+    });
+  };
+
   // Проверка за логнат потребител
   useEffect(() => {
     const fetchUser = async () => {
@@ -120,17 +129,7 @@ function Navbar() {
               </li>
             </>
           ) : (
-            <>
-              <li>
-                <Link className="navbar-link" to="/login">
-                  Вход
-                </Link>
-              </li>
-              <li>
-                <Link className="navbar-link" to="/register">
-                  Регистрация
-                </Link>
-              </li>
+            <>           
             </>
           )}
         </ul>
@@ -139,7 +138,9 @@ function Navbar() {
       {showWorkout && (
         <WorkoutList
           workouts={workouts}
+          setWorkouts={setWorkouts} // Предаваме функцията setWorkouts
           onClose={() => setShowWorkout(false)}
+          onReplaceWorkout={replaceWorkout} // Предаваме функцията за замяна
         />
       )}
     </div>
@@ -147,6 +148,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-
-

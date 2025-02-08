@@ -69,3 +69,13 @@
   font-size: 0.9em;
   margin-top: 10px;
 }
+
+.toggle-link {
+  color: #cc482a;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.toggle-link:hover {
+  color: #ea2a0d;
+}

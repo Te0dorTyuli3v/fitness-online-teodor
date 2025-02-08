@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import './WorkoutList.css';
 
-function WorkoutList({ workouts = [], onClose, onReplaceWorkout }) {
+function WorkoutList({ workouts = [], setWorkouts, onClose, onReplaceWorkout }) {
   const [currentWorkoutIndex, setCurrentWorkoutIndex] = useState(0);
   const [editMode, setEditMode] = useState(false);
   const [editedWorkout, setEditedWorkout] = useState(null);
-
+  
   const handleNextWorkout = () => {
     if (workouts.length > 0) {
       setCurrentWorkoutIndex((prevIndex) => (prevIndex + 1) % workouts.length);
@@ -24,7 +24,15 @@ function WorkoutList({ workouts = [], onClose, onReplaceWorkout }) {
     setEditMode(true);
     setEditedWorkout({ ...workouts[currentWorkoutIndex] });
   };
-
+  
+  const replaceWorkout = (index, updatedWorkout) => {
+    setWorkouts((prevWorkouts) => {
+      const updatedWorkouts = [...prevWorkouts];
+      updatedWorkouts[index] = updatedWorkout; // Заместване на тренировката
+      return updatedWorkouts;
+    });
+  };
+  
   const handleWorkoutChange = (field, value) => {
     setEditedWorkout((prevWorkout) => ({
       ...prevWorkout,
@@ -44,10 +52,12 @@ function WorkoutList({ workouts = [], onClose, onReplaceWorkout }) {
   };
 
   const saveEditedWorkout = () => {
-    onReplaceWorkout(currentWorkoutIndex, editedWorkout);
+    const updatedWorkouts = [...workouts];
+    updatedWorkouts[currentWorkoutIndex] = editedWorkout;
+    setWorkouts(updatedWorkouts); // Използваме setWorkouts за актуализация
     setEditMode(false);
-    setEditedWorkout(null);
   };
+  
 
   if (!workouts || workouts.length === 0) {
     return (
@@ -145,8 +155,9 @@ function WorkoutList({ workouts = [], onClose, onReplaceWorkout }) {
               </tbody>
             </table>
             <button className="save-button" onClick={saveEditedWorkout}>
-              Запази
+                  Запази
             </button>
+
           </>
         )}
       </div>

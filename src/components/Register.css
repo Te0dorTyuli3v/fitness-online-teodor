@@ -12,7 +12,7 @@ form {
   background-color: rgba(255, 255, 255, 0.9); /* Бял полупрозрачен фон за формата */
   padding: 20px 30px;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Лека сянка */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.155); /* Лека сянка */
   max-width: 400px;
   width: 100%;
   text-align: center;
