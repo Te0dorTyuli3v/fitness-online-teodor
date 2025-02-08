@@ -9,8 +9,6 @@ import DailyWorkouts from './components/DailyWorkouts';
 import WorkoutSchedule from './components/WorkoutSchedule';
 import './App.css';
 import Login from './components/Login';
-import Register from './components/Register';
-import ChangePassword from './components/ChangePassword';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Състояние за автентикация
@@ -26,26 +24,26 @@ function App() {
     ]);
   };
 
+  const handleLogout = () => {
+    setIsAuthenticated(false); // Промяна на състоянието на false при изход
+  };
+
   const [selectedPlanId, setSelectedPlanId] = useState(null);
 
   return (
     <Router>
       <div className="App">
-        {/* Проверка за автентикация */}
         {!isAuthenticated ? (
           <Login onLoginSuccess={() => setIsAuthenticated(true)} />
         ) : (
           <>
-            <Navbar />
+            <Navbar onLogout={handleLogout} /> {/* Предаване на handleLogout */}
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/workouts" element={<WorkoutList workouts={workouts} />} />
               <Route path="/add" element={<AddWorkout onAddWorkout={addWorkout} />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
               <Route path="/plans" element={<WorkoutPlans onSelectPlan={setSelectedPlanId} />} />
               <Route path="/plans/:id" element={<DailyWorkouts planId={selectedPlanId} />} />
-              <Route path="/change-password" element={<ChangePassword />} />
               <Route path="/workout-schedule" element={<WorkoutSchedule />} />
             </Routes>
           </>
@@ -56,4 +54,6 @@ function App() {
 }
 
 export default App;
+
+
 

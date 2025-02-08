@@ -6,7 +6,7 @@ import { faDumbbell, faCalendarAlt, faHome, faSignOutAlt } from '@fortawesome/fr
 import WorkoutList from './WorkoutList';
 import { supabase } from '../supabase'; // Импортирайте Supabase
 
-function Navbar() {
+function Navbar({ onLogout }) {
   const [showWorkout, setShowWorkout] = useState(false);
   const [user, setUser] = useState(null); // Управление на състоянието на потребителя
   const navigate = useNavigate();
@@ -48,15 +48,6 @@ function Navbar() {
     },
   ]);
 
-  // Функция за замяна на тренировка
-  const replaceWorkout = (index, updatedWorkout) => {
-    setWorkouts((prevWorkouts) => {
-      const updatedWorkouts = [...prevWorkouts];
-      updatedWorkouts[index] = updatedWorkout; // Заместване на редактираната тренировка
-      return updatedWorkouts;
-    });
-  };
-
   // Проверка за логнат потребител
   useEffect(() => {
     const fetchUser = async () => {
@@ -76,8 +67,8 @@ function Navbar() {
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (!error) {
-      setUser(null);
-      navigate('/login');
+      setUser(null); // Зануляване на потребителя
+      if (onLogout) onLogout(); // Уведомяване на App за изход
     } else {
       console.error('Грешка при изход:', error.message);
     }
@@ -128,19 +119,15 @@ function Navbar() {
                 </button>
               </li>
             </>
-          ) : (
-            <>           
-            </>
-          )}
+          ) : null}
         </ul>
       </nav>
 
       {showWorkout && (
         <WorkoutList
           workouts={workouts}
-          setWorkouts={setWorkouts} // Предаваме функцията setWorkouts
+          setWorkouts={setWorkouts} // Предаване на setWorkouts
           onClose={() => setShowWorkout(false)}
-          onReplaceWorkout={replaceWorkout} // Предаваме функцията за замяна
         />
       )}
     </div>

@@ -11,7 +11,7 @@ function Login({ onLoginSuccess }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     setMessage('');
-    const { user, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -20,7 +20,7 @@ function Login({ onLoginSuccess }) {
       setMessage(`Грешка при влизане: ${error.message}`);
     } else {
       setMessage('Успешно влизане!');
-      onLoginSuccess(user); // Уведомяване за успешен вход
+      onLoginSuccess(); // Уведомяване за успешен вход
     }
   };
 
@@ -105,3 +105,4 @@ function Login({ onLoginSuccess }) {
 }
 
 export default Login;
+
