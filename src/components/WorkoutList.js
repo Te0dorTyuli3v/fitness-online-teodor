@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import './WorkoutList.css';
 
-function WorkoutList({ workouts = [], setWorkouts, onClose, onReplaceWorkout }) {
+function WorkoutList({ workouts = [], setWorkouts, onClose }) {
   const [currentWorkoutIndex, setCurrentWorkoutIndex] = useState(0);
   const [editMode, setEditMode] = useState(false);
   const [editedWorkout, setEditedWorkout] = useState(null);
-  
+
   const handleNextWorkout = () => {
     if (workouts.length > 0) {
       setCurrentWorkoutIndex((prevIndex) => (prevIndex + 1) % workouts.length);
@@ -24,15 +24,7 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, onReplaceWorkout }) 
     setEditMode(true);
     setEditedWorkout({ ...workouts[currentWorkoutIndex] });
   };
-  
-  const replaceWorkout = (index, updatedWorkout) => {
-    setWorkouts((prevWorkouts) => {
-      const updatedWorkouts = [...prevWorkouts];
-      updatedWorkouts[index] = updatedWorkout; // Заместване на тренировката
-      return updatedWorkouts;
-    });
-  };
-  
+
   const handleWorkoutChange = (field, value) => {
     setEditedWorkout((prevWorkout) => ({
       ...prevWorkout,
@@ -54,17 +46,29 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, onReplaceWorkout }) 
   const saveEditedWorkout = () => {
     const updatedWorkouts = [...workouts];
     updatedWorkouts[currentWorkoutIndex] = editedWorkout;
-    setWorkouts(updatedWorkouts); // Използваме setWorkouts за актуализация
+    setWorkouts(updatedWorkouts); // Запазва редактирания списък
     setEditMode(false);
   };
-  
+
+  const deleteWorkout = () => {
+    const updatedWorkouts = workouts.filter(
+      (_, index) => index !== currentWorkoutIndex
+    ); // Премахва текущата тренировка
+    setWorkouts(updatedWorkouts);
+    setCurrentWorkoutIndex(0); // Нулира текущия индекс
+    if (updatedWorkouts.length === 0) {
+      setEditMode(false);
+    }
+  };
 
   if (!workouts || workouts.length === 0) {
     return (
       <>
         <div className="modal-backdrop" onClick={onClose}></div>
         <div className="workout-modal">
-          <button className="close-button" onClick={onClose}>X</button>
+          <button className="close-button" onClick={onClose}>
+            X
+          </button>
           <h2>Няма налични тренировки</h2>
         </div>
       </>
@@ -75,7 +79,9 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, onReplaceWorkout }) 
     <>
       <div className="modal-backdrop" onClick={onClose}></div>
       <div className="workout-modal">
-        <button className="close-button" onClick={onClose}>X</button>
+        <button className="close-button" onClick={onClose}>
+          X
+        </button>
         {!editMode ? (
           <>
             <h2>{workouts[currentWorkoutIndex]?.title || "Тренировка"}</h2>
@@ -103,9 +109,14 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, onReplaceWorkout }) 
               <button onClick={handlePreviousWorkout}>⬅ Предишна</button>
               <button onClick={handleNextWorkout}>Следваща ➡</button>
             </div>
-            <button className="edit-button" onClick={startEditWorkout}>
-              Редактирай
-            </button>
+            <div className="action-buttons">
+              <button className="edit-button" onClick={startEditWorkout}>
+                Редактирай
+              </button>
+              <button className="delete-button" onClick={deleteWorkout}>
+                Изтрий
+              </button>
+            </div>
           </>
         ) : (
           <>
@@ -155,9 +166,8 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, onReplaceWorkout }) 
               </tbody>
             </table>
             <button className="save-button" onClick={saveEditedWorkout}>
-                  Запази
+              Запази
             </button>
-
           </>
         )}
       </div>

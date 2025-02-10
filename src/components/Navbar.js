@@ -4,7 +4,7 @@ import './Navbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDumbbell, faCalendarAlt, faHome, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import WorkoutList from './WorkoutList';
-import { supabase } from '../supabase'; // Импортирайте Supabase
+import { supabase } from '../supabase'; 
 
 function Navbar({ onLogout }) {
   const [showWorkout, setShowWorkout] = useState(false);
