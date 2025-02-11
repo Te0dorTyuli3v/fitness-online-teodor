@@ -100,4 +100,18 @@
   background-color: darkred;
 }
 
+.create-button {
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-left: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.create-button:hover {
+  background-color: darkgreen;
+}
+
 

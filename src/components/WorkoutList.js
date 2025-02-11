@@ -32,6 +32,19 @@ function WorkoutList({ workouts = [], setWorkouts, onClose }) {
     }));
   };
 
+  const createNewWorkout = () => {
+    const newWorkout = {
+      title: `Нова тренировка ${workouts.length + 1}`,
+      exercises: [
+        { name: "", reps: "", sets: "" },
+      ],
+    };
+    
+    setWorkouts([...workouts, newWorkout]); // Добавяне на новата тренировка
+    setCurrentWorkoutIndex(workouts.length); // Пренасочване към новата тренировка
+  };
+  
+
   const handleExerciseChange = (index, field, value) => {
     setEditedWorkout((prevWorkout) => {
       const updatedExercises = [...prevWorkout.exercises];
@@ -110,13 +123,17 @@ function WorkoutList({ workouts = [], setWorkouts, onClose }) {
               <button onClick={handleNextWorkout}>Следваща ➡</button>
             </div>
             <div className="action-buttons">
-              <button className="edit-button" onClick={startEditWorkout}>
-                Редактирай
-              </button>
-              <button className="delete-button" onClick={deleteWorkout}>
-                Изтрий
-              </button>
-            </div>
+         <button className="edit-button" onClick={startEditWorkout}>
+            Редактирай
+         </button>
+         <button className="delete-button" onClick={deleteWorkout}>
+             Изтрий
+         </button>
+         <button className="create-button" onClick={createNewWorkout}>
+              Създай
+         </button>
+              </div>
+
           </>
         ) : (
           <>
