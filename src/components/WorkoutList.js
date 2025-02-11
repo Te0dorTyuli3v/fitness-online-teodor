@@ -5,6 +5,7 @@ function WorkoutList({ workouts = [], setWorkouts, onClose }) {
   const [currentWorkoutIndex, setCurrentWorkoutIndex] = useState(0);
   const [editMode, setEditMode] = useState(false);
   const [editedWorkout, setEditedWorkout] = useState(null);
+  const [newExercise, setNewExercise] = useState({ name: '', reps: '', sets: '' });
 
   const handleNextWorkout = () => {
     if (workouts.length > 0) {
@@ -32,19 +33,6 @@ function WorkoutList({ workouts = [], setWorkouts, onClose }) {
     }));
   };
 
-  const createNewWorkout = () => {
-    const newWorkout = {
-      title: `Нова тренировка ${workouts.length + 1}`,
-      exercises: [
-        { name: "", reps: "", sets: "" },
-      ],
-    };
-    
-    setWorkouts([...workouts, newWorkout]); // Добавяне на новата тренировка
-    setCurrentWorkoutIndex(workouts.length); // Пренасочване към новата тренировка
-  };
-  
-
   const handleExerciseChange = (index, field, value) => {
     setEditedWorkout((prevWorkout) => {
       const updatedExercises = [...prevWorkout.exercises];
@@ -59,42 +47,33 @@ function WorkoutList({ workouts = [], setWorkouts, onClose }) {
   const saveEditedWorkout = () => {
     const updatedWorkouts = [...workouts];
     updatedWorkouts[currentWorkoutIndex] = editedWorkout;
-    setWorkouts(updatedWorkouts); // Запазва редактирания списък
+    setWorkouts(updatedWorkouts);
     setEditMode(false);
   };
 
-  const deleteWorkout = () => {
-    const updatedWorkouts = workouts.filter(
-      (_, index) => index !== currentWorkoutIndex
-    ); // Премахва текущата тренировка
-    setWorkouts(updatedWorkouts);
-    setCurrentWorkoutIndex(0); // Нулира текущия индекс
-    if (updatedWorkouts.length === 0) {
-      setEditMode(false);
-    }
+  const addNewExercise = () => {
+    if (!newExercise.name || !newExercise.reps || !newExercise.sets) return;
+    setEditedWorkout((prevWorkout) => ({
+      ...prevWorkout,
+      exercises: [...prevWorkout.exercises, newExercise],
+    }));
+    setNewExercise({ name: '', reps: '', sets: '' });
   };
 
-  if (!workouts || workouts.length === 0) {
-    return (
-      <>
-        <div className="modal-backdrop" onClick={onClose}></div>
-        <div className="workout-modal">
-          <button className="close-button" onClick={onClose}>
-            X
-          </button>
-          <h2>Няма налични тренировки</h2>
-        </div>
-      </>
-    );
-  }
+  const createNewWorkout = () => {
+    const newWorkout = {
+      title: `Нова тренировка ${workouts.length + 1}`,
+      exercises: []
+    };
+    setWorkouts([...workouts, newWorkout]);
+    setCurrentWorkoutIndex(workouts.length);
+  };
 
   return (
     <>
       <div className="modal-backdrop" onClick={onClose}></div>
       <div className="workout-modal">
-        <button className="close-button" onClick={onClose}>
-          X
-        </button>
+        <button className="close-button" onClick={onClose}>X</button>
         {!editMode ? (
           <>
             <h2>{workouts[currentWorkoutIndex]?.title || "Тренировка"}</h2>
@@ -123,17 +102,9 @@ function WorkoutList({ workouts = [], setWorkouts, onClose }) {
               <button onClick={handleNextWorkout}>Следваща ➡</button>
             </div>
             <div className="action-buttons">
-         <button className="edit-button" onClick={startEditWorkout}>
-            Редактирай
-         </button>
-         <button className="delete-button" onClick={deleteWorkout}>
-             Изтрий
-         </button>
-         <button className="create-button" onClick={createNewWorkout}>
-              Създай
-         </button>
-              </div>
-
+              <button className="edit-button" onClick={startEditWorkout}>Редактирай</button>
+              <button className="create-button" onClick={createNewWorkout}>Създай</button>
+            </div>
           </>
         ) : (
           <>
@@ -182,9 +153,11 @@ function WorkoutList({ workouts = [], setWorkouts, onClose }) {
                 ))}
               </tbody>
             </table>
-            <button className="save-button" onClick={saveEditedWorkout}>
-              Запази
-            </button>
+            <input type="text" placeholder="Упражнение" value={newExercise.name} onChange={(e) => setNewExercise({...newExercise, name: e.target.value})} />
+            <input type="text" placeholder="Повт" value={newExercise.reps} onChange={(e) => setNewExercise({...newExercise, reps: e.target.value})} />
+            <input type="text" placeholder="Серии" value={newExercise.sets} onChange={(e) => setNewExercise({...newExercise, sets: e.target.value})} />
+            <button onClick={addNewExercise}>Добави</button>
+            <button className="save-button" onClick={saveEditedWorkout}>Запази</button>
           </>
         )}
       </div>
