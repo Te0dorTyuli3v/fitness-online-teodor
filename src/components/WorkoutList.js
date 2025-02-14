@@ -69,6 +69,15 @@ function WorkoutList({ workouts = [], setWorkouts, onClose }) {
     setCurrentWorkoutIndex(workouts.length);
   };
 
+  const deleteWorkout = () => {
+    const updatedWorkouts = workouts.filter(
+      (_, index) => index !== currentWorkoutIndex
+    );
+    setWorkouts(updatedWorkouts);
+    setCurrentWorkoutIndex(0);
+    setEditMode(false);
+  };
+
   return (
     <>
       <div className="modal-backdrop" onClick={onClose}></div>
@@ -103,6 +112,7 @@ function WorkoutList({ workouts = [], setWorkouts, onClose }) {
             </div>
             <div className="action-buttons">
               <button className="edit-button" onClick={startEditWorkout}>Редактирай</button>
+              <button className="delete-button" onClick={deleteWorkout}>Изтрий</button>
               <button className="create-button" onClick={createNewWorkout}>Създай</button>
             </div>
           </>
