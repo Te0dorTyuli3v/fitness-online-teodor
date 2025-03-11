@@ -6,14 +6,14 @@ import './WorkoutSchedule.css';
 function WorkoutSchedule() {
   const generateWorkouts = () => {
     const workouts = [];
-    const startDate = new Date(2025, 0, 1); // Начална дата (1 януари 2025)
-    const totalDays = 31; // Например за месец януари
+    const startDate = new Date(2025, 0, 1);
+    const totalDays = 31;
     for (let i = 0; i < totalDays; i++) {
       const currentDate = new Date(startDate);
       currentDate.setDate(startDate.getDate() + i);
       workouts.push({
         date: currentDate,
-        type: i % 2 === 0 ? 'Тренировъчен ден' : 'Почивен ден', // През ден тренировка
+        type: i % 2 === 0 ? 'Тренировъчен ден' : 'Почивен ден',
       });
     }
     return workouts;
@@ -36,20 +36,30 @@ function WorkoutSchedule() {
   return (
     <div className="workout-schedule-container">
       <h2>Календар</h2>
-      <Calendar tileClassName={tileClassName} />
-
-      <div className="workout-graph">
-        <h2>Тренировъчен график</h2>
-        <ul>
-          {workouts.map((workout, index) => (
-            <li key={index} className={workout.type === 'Тренировъчен ден' ? 'training-day' : 'rest-day'}>
-              {index + 1}. {workout.type} - {workout.date.toLocaleDateString()}
-            </li>
-          ))}
-        </ul>
+  
+      <div className="calendar-and-graph">
+        <div className="calendar-section">
+          <Calendar tileClassName={tileClassName} />
+        </div>
+  
+        <div className="workout-graph scrollable-graph">
+          <h2>Тренировъчен график</h2>
+          <ul>
+            {workouts.map((workout, index) => (
+              <li
+                key={index}
+                className={workout.type === 'Тренировъчен ден' ? 'training-day' : 'rest-day'}
+              >
+                {index + 1}. {workout.type} - {workout.date.toLocaleDateString()}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
+  
 }
 
 export default WorkoutSchedule;
+
