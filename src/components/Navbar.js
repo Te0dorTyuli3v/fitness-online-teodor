@@ -103,10 +103,11 @@ function Navbar({ onLogout }) {
 
       {showWorkout && (
         <WorkoutList
-          workouts={workouts}
-          setWorkouts={setWorkouts}
-          onClose={() => setShowWorkout(false)}
-        />
+        workouts={workouts}
+        setWorkouts={setWorkouts}
+        onClose={() => setShowWorkout(false)}
+        user={user}
+      />
       )}
     </div>
   );
