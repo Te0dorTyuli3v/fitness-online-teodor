@@ -114,4 +114,14 @@
   background-color: darkgreen;
 }
 
+.save-button {
+  background-color: #247742;
+  color: white;
+  padding: 10px 20px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
 

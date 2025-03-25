@@ -111,10 +111,12 @@ function WorkoutList({ workouts = [], setWorkouts, onClose }) {
               <button onClick={handleNextWorkout}>Следваща ➡</button>
             </div>
             <div className="action-buttons">
-              <button className="edit-button" onClick={startEditWorkout}>Редактирай</button>
-              <button className="delete-button" onClick={deleteWorkout}>Изтрий</button>
-              <button className="create-button" onClick={createNewWorkout}>Създай</button>
+            <button className="edit-button" onClick={startEditWorkout}>Редактирай</button>
+            <button className="delete-button" onClick={deleteWorkout}>Изтрий</button>
+            <button className="create-button" onClick={createNewWorkout}>Създай</button>
+            <button className="save-button" onClick={saveEditedWorkout}>Запази</button>
             </div>
+
           </>
         ) : (
           <>

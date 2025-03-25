@@ -13,23 +13,38 @@ function Navbar({ onLogout }) {
 
   // Зареждане на тренировките от Supabase
   useEffect(() => {
-    const fetchWorkouts = async () => {
-      const { data, error } = await supabase
-        .from('workouts')
-        .select('*')
-        .eq('user_id', user?.id);
+  const fetchWorkouts = async () => {
+    const { data: workoutsData, error: workoutsError } = await supabase
+      .from('workouts')
+      .select('*')
+      .eq('user_id', user?.id);
 
-      if (error) {
-        console.error('Грешка при зареждане на тренировките:', error.message);
-      } else {
-        setWorkouts(data || []);
-      }
-    };
-
-    if (user) {
-      fetchWorkouts();
+    if (workoutsError) {
+      console.error('Грешка при зареждане на тренировките:', workoutsError.message);
+      return;
     }
-  }, [user]);
+
+    // Зареждане на упражненията за всяка тренировка
+    const workoutsWithExercises = await Promise.all(
+      workoutsData.map(async (workout) => {
+        const { data: exercisesData, error: exercisesError } = await supabase
+          .from('exercises')
+          .select('*')
+          .eq('workout_id', workout.id);
+
+        return {
+          ...workout,
+          exercises: exercisesError ? [] : exercisesData
+        };
+      })
+    );
+
+    setWorkouts(workoutsWithExercises);
+  };
+
+  if (user) fetchWorkouts();
+}, [user]);
+
 
   // Проверка за логнат потребител
   useEffect(() => {
