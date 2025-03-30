@@ -11,42 +11,7 @@ function Navbar({ onLogout }) {
   const [user, setUser] = useState(null);
   const [workouts, setWorkouts] = useState([]);
 
-  // Зареждане на тренировките от Supabase
-  useEffect(() => {
-  const fetchWorkouts = async () => {
-    const { data: workoutsData, error: workoutsError } = await supabase
-      .from('workouts')
-      .select('*')
-      .eq('user_id', user?.id);
-
-    if (workoutsError) {
-      console.error('Грешка при зареждане на тренировките:', workoutsError.message);
-      return;
-    }
-
-    // Зареждане на упражненията за всяка тренировка
-    const workoutsWithExercises = await Promise.all(
-      workoutsData.map(async (workout) => {
-        const { data: exercisesData, error: exercisesError } = await supabase
-          .from('exercises')
-          .select('*')
-          .eq('workout_id', workout.id);
-
-        return {
-          ...workout,
-          exercises: exercisesError ? [] : exercisesData
-        };
-      })
-    );
-
-    setWorkouts(workoutsWithExercises);
-  };
-
-  if (user) fetchWorkouts();
-}, [user]);
-
-
-  // Проверка за логнат потребител
+  // 🔐 Вземи логнатия потребител
   useEffect(() => {
     const fetchUser = async () => {
       const { data, error } = await supabase.auth.getUser();
@@ -60,7 +25,42 @@ function Navbar({ onLogout }) {
     fetchUser();
   }, []);
 
-  // Изход от приложението
+  // 🔄 Зареди тренировките от Supabase
+  useEffect(() => {
+    const fetchWorkouts = async () => {
+      if (!user) return;
+
+      const { data: workoutsData, error: workoutsError } = await supabase
+        .from('workouts')
+        .select('*')
+        .eq('user_id', user.id);
+
+      if (workoutsError) {
+        console.error('Грешка при зареждане на тренировките:', workoutsError.message);
+        return;
+      }
+
+      // Зареждане на упражненията за всяка тренировка
+      const workoutsWithExercises = await Promise.all(
+        workoutsData.map(async (workout) => {
+          const { data: exercisesData, error: exercisesError } = await supabase
+            .from('exercises')
+            .select('*')
+            .eq('workout_id', workout.id);
+
+          return {
+            ...workout,
+            exercises: exercisesError ? [] : exercisesData
+          };
+        })
+      );
+
+      setWorkouts(workoutsWithExercises);
+    };
+
+    fetchWorkouts();
+  }, [user]);
+
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (!error) {
@@ -89,16 +89,13 @@ function Navbar({ onLogout }) {
           <li>
             <button
               className="navbar-link"
-              onClick={() => {
-                setWorkouts([{ title: 'Нова тренировка', exercises: [] }]); // Започни с празна тренировка
-                setShowWorkout(true);
-              }}
+              onClick={() => setShowWorkout(true)}
             >
               <FontAwesomeIcon icon={faDumbbell} style={{ marginRight: '8px', color: 'white' }} />
               Тренировки
             </button>
           </li>
-          {user ? (
+          {user && (
             <>
               <li>
                 <span className="navbar-user">
@@ -112,17 +109,17 @@ function Navbar({ onLogout }) {
                 </button>
               </li>
             </>
-          ) : null}
+          )}
         </ul>
       </nav>
 
       {showWorkout && (
         <WorkoutList
-        workouts={workouts}
-        setWorkouts={setWorkouts}
-        onClose={() => setShowWorkout(false)}
-        user={user}
-      />
+          workouts={workouts}
+          setWorkouts={setWorkouts}
+          onClose={() => setShowWorkout(false)}
+          user={user}
+        />
       )}
     </div>
   );
