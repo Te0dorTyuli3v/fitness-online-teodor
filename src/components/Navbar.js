@@ -11,21 +11,16 @@ function Navbar({ onLogout }) {
   const [user, setUser] = useState(null);
   const [workouts, setWorkouts] = useState([]);
 
-  // 🔐 Вземи логнатия потребител
+  // Зареждане на логнатия потребител
   useEffect(() => {
     const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (data?.user) {
-        setUser(data.user);
-      } else {
-        setUser(null);
-      }
+      const { data } = await supabase.auth.getUser();
+      setUser(data?.user || null);
     };
-
     fetchUser();
   }, []);
 
-  // 🔄 Зареди тренировките от Supabase
+  // Зареждане на тренировките и упражненията
   useEffect(() => {
     const fetchWorkouts = async () => {
       if (!user) return;
@@ -40,7 +35,6 @@ function Navbar({ onLogout }) {
         return;
       }
 
-      // Зареждане на упражненията за всяка тренировка
       const workoutsWithExercises = await Promise.all(
         workoutsData.map(async (workout) => {
           const { data: exercisesData, error: exercisesError } = await supabase
@@ -50,7 +44,7 @@ function Navbar({ onLogout }) {
 
           return {
             ...workout,
-            exercises: exercisesError ? [] : exercisesData
+            exercises: exercisesError ? [] : exercisesData,
           };
         })
       );
