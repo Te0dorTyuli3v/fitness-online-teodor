@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabase';
+import './WorkoutScheduleTable.css';
+
 
 function WorkoutScheduleTable({ user }) {
   const [schedule, setSchedule] = useState([]);
@@ -118,12 +120,12 @@ function WorkoutScheduleTable({ user }) {
                 {editingIndex === index ? (
                   <>
                     <button onClick={() => updateEntry(index)}>Запази</button>
-                    <button onClick={() => setEditingIndex(null)}>Откажи</button>
+                    <button className="cancel-button" onClick={() => setEditingIndex(null)}>Откажи</button>
                   </>
                 ) : (
                   <>
                     <button onClick={() => setEditingIndex(index)}>Редактирай</button>
-                    <button onClick={() => deleteEntry(entry.id)}>Изтрий</button>
+                    <button className="delete-button" onClick={() => deleteEntry(entry.id)}>Изтрий</button>
                   </>
                 )}
               </td>
@@ -154,7 +156,7 @@ function WorkoutScheduleTable({ user }) {
               />
             </td>
             <td>
-              <button onClick={addEntry}>Добави</button>
+            <button className="add-button" onClick={addEntry}>Добави</button>
             </td>
           </tr>
         </tbody>

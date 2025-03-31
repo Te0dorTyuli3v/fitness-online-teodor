@@ -1,2 +1,87 @@
-
+.workout-table {
+     max-width: 900px;
+     margin: 40px auto;
+     padding: 25px;
+     background: #fff;
+     border-radius: 12px;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+   }
+   
+   .workout-table h2 {
+     text-align: center;
+     margin-bottom: 25px;
+     color: #333;
+     font-size: 24px;
+     font-weight: 600;
+   }
+   
+   .workout-table table {
+     width: 100%;
+     border-collapse: collapse;
+     font-family: 'Segoe UI', sans-serif;
+   }
+   
+   .workout-table th,
+   .workout-table td {
+     padding: 12px 14px;
+     text-align: center;
+     border-bottom: 1px solid #ddd;
+   }
+   
+   .workout-table th {
+     background-color: #f7f7f7;
+     color: #444;
+     font-weight: bold;
+   }
+   
+   .workout-table input[type="date"],
+   .workout-table input[type="text"],
+   .workout-table select {
+     padding: 8px;
+     width: 100%;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     box-sizing: border-box;
+   }
+   
+   .workout-table button {
+     margin: 4px;
+     padding: 6px 12px;
+     background-color: #cb6b7e;
+     color: white;
+     border: none;
+     border-radius: 5px;
+     font-size: 14px;
+     cursor: pointer;
+     transition: background-color 0.2s ease;
+   }
+   
+   .workout-table button:hover {
+     background-color: #627283;
+   }
+   
+   .workout-table .add-button {
+     background-color: #69aa78;
+   }
+   
+   .workout-table .add-button:hover {
+     background-color: #218838;
+   }
+   
+   .workout-table .cancel-button {
+     background-color: #6c757d;
+   }
+   
+   .workout-table .cancel-button:hover {
+     background-color: #545b62;
+   }
+   
+   .workout-table .delete-button {
+     background-color: #dc3545;
+   }
+   
+   .workout-table .delete-button:hover {
+     background-color: #b52a37;
+   }
+   
    
