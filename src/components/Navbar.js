@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDumbbell, faCalendarAlt, faHome, faSignOutAlt, faTable } from '@fortawesome/free-solid-svg-icons';
 import WorkoutList from './WorkoutList';
 import WorkoutScheduleTable from './WorkoutScheduleTable';
+import WorkoutSchedule from './WorkoutSchedule';
 import { supabase } from '../supabase';
 
 function Navbar({ onLogout }) {
@@ -12,6 +13,8 @@ function Navbar({ onLogout }) {
   const [showScheduleTable, setShowScheduleTable] = useState(false);
   const [user, setUser] = useState(null);
   const [workouts, setWorkouts] = useState([]);
+  const [showCalendar, setShowCalendar] = useState(false);
+
 
   // Зареждане на логнатия потребител
   useEffect(() => {
