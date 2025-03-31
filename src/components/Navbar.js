@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDumbbell, faCalendarAlt, faHome, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faDumbbell, faCalendarAlt, faHome, faSignOutAlt, faTable } from '@fortawesome/free-solid-svg-icons';
 import WorkoutList from './WorkoutList';
+import WorkoutScheduleTable from './WorkoutScheduleTable';
 import { supabase } from '../supabase';
 
 function Navbar({ onLogout }) {
   const [showWorkout, setShowWorkout] = useState(false);
+  const [showScheduleTable, setShowScheduleTable] = useState(false);
   const [user, setUser] = useState(null);
   const [workouts, setWorkouts] = useState([]);
 
@@ -77,7 +79,7 @@ function Navbar({ onLogout }) {
           <li>
             <Link className="navbar-link" to="/workout-schedule">
               <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight: '8px', color: 'white' }} />
-              Тренировъчен график
+              Календар
             </Link>
           </li>
           <li>
@@ -87,6 +89,15 @@ function Navbar({ onLogout }) {
             >
               <FontAwesomeIcon icon={faDumbbell} style={{ marginRight: '8px', color: 'white' }} />
               Тренировки
+            </button>
+          </li>
+          <li>
+            <button
+              className="navbar-link"
+              onClick={() => setShowScheduleTable(true)}
+            >
+              <FontAwesomeIcon icon={faTable} style={{ marginRight: '8px', color: 'white' }} />
+              Тренировъчен график
             </button>
           </li>
           {user && (
@@ -114,6 +125,13 @@ function Navbar({ onLogout }) {
           onClose={() => setShowWorkout(false)}
           user={user}
         />
+      )}
+
+      {showScheduleTable && (
+        <div className="schedule-table-modal">
+          <button className="close-button" onClick={() => setShowScheduleTable(false)}>X</button>
+          <WorkoutScheduleTable user={user} />
+        </div>
       )}
     </div>
   );

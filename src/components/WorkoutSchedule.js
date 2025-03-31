@@ -43,7 +43,7 @@ function WorkoutSchedule() {
         </div>
   
         <div className="workout-graph scrollable-graph">
-          <h2>Тренировъчен график</h2>
+          <h2>Календар</h2>
           <ul>
             {workouts.map((workout, index) => (
               <li

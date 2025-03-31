@@ -7,6 +7,8 @@ import Home from './components/Home';
 import WorkoutPlans from './components/WorkoutPlans';
 import DailyWorkouts from './components/DailyWorkouts';
 import WorkoutSchedule from './components/WorkoutSchedule';
+
+
 import './App.css';
 import Login from './components/Login';
 
@@ -45,6 +47,8 @@ function App() {
               <Route path="/plans" element={<WorkoutPlans onSelectPlan={setSelectedPlanId} />} />
               <Route path="/plans/:id" element={<DailyWorkouts planId={selectedPlanId} />} />
               <Route path="/workout-schedule" element={<WorkoutSchedule />} />
+              
+
             </Routes>
           </>
         )}
