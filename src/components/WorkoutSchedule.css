@@ -35,7 +35,7 @@
   }
   
   .react-calendar__tile--now {
-    background-color: #f2a0bd !important; 
+    background-color: #939390 !important; 
     color: black !important;
     font-weight: bold;
   }
@@ -125,15 +125,25 @@
   }
   
   .scrollable-graph li.training-day {
-    background-color: #add381;
+    background-color: #709547;
     color: white;
     font-weight: bold;
   }
   
   .scrollable-graph li.rest-day {
-    background-color: #cd7670;
+    background-color: #c7615a;
     color: white;
     font-weight: bold;
+  }
+  
+  .selected-workout-info {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(250, 2, 2, 0.15);
+    border-radius: 8px;
+    color: white;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
   
   

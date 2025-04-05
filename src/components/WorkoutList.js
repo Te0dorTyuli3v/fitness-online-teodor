@@ -8,6 +8,8 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, user }) {
   const [editedWorkout, setEditedWorkout] = useState(null);
   const [newExercise, setNewExercise] = useState({ name: '', reps: '', sets: '' });
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
 
   const handleNextWorkout = () => {
     if (workouts.length > 0) {
@@ -42,13 +44,29 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, user }) {
   };
 
   const addNewExercise = () => {
-    if (!newExercise.name || !newExercise.reps || !newExercise.sets) return;
+    const { name, reps, sets } = newExercise;
+  
+    if (!name.trim() || !reps.trim() || !sets.trim()) {
+      setErrorMessage('Моля, попълнете всички полета.');
+      return;
+    }
+  
+    if (isNaN(reps) || isNaN(sets)) {
+      setErrorMessage('Повторенията и сериите трябва да са числа.');
+      return;
+    }
+  
+    const updatedExercises = [...(editedWorkout?.exercises || []), newExercise];
+  
     setEditedWorkout((prev) => ({
       ...prev,
-      exercises: [...prev.exercises, newExercise],
+      exercises: updatedExercises,  // 🟢 ъпдейтнат списък
     }));
+  
     setNewExercise({ name: '', reps: '', sets: '' });
+    setErrorMessage('');
   };
+  
 
   const saveEditedWorkout = async () => {
     if (!editedWorkout || !user) return;

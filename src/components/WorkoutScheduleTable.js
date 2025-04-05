@@ -74,7 +74,7 @@ function WorkoutScheduleTable({ user }) {
           <tr>
             <th>Дата</th>
             <th>Тип</th>
-            <th>Бележка</th>
+            <th>Вид тренировка</th>
             <th>Действия</th>
           </tr>
         </thead>
