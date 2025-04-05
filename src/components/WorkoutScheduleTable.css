@@ -7,10 +7,6 @@
      border-radius: 12px;
      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
    }
-
-   
-   
-   
    .workout-table h2 {
      text-align: center;
      margin-bottom: 25px;
@@ -88,4 +84,16 @@
      background-color: #b52a37;
    }
    
+
+   .training-day {
+    background-color: #94be95 !important;
+    border-radius: 50%;
+  }
+  
+  .rest-day {
+    background-color: #e08c94 !important;
+    border-radius: 50%;
+  }
+  
+
    
