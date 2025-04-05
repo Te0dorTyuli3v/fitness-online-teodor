@@ -16,6 +16,7 @@ function Navbar({ onLogout }) {
   const [showCalendar, setShowCalendar] = useState(false);
 
 
+
   // Зареждане на логнатия потребител
   useEffect(() => {
     const fetchUser = async () => {
@@ -80,11 +81,15 @@ function Navbar({ onLogout }) {
             </Link>
           </li>
           <li>
-            <Link className="navbar-link" to="/workout-schedule">
-              <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight: '8px', color: 'white' }} />
-              Календар
-            </Link>
-          </li>
+  <button
+    className="navbar-link"
+    onClick={() => setShowCalendar(true)}
+  >
+    <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight: '8px', color: 'white' }} />
+    Календар
+  </button>
+</li>
+
           <li>
             <button
               className="navbar-link"
@@ -136,6 +141,7 @@ function Navbar({ onLogout }) {
           <WorkoutScheduleTable user={user} />
         </div>
       )}
+      
     </div>
   );
 }
