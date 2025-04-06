@@ -1,3 +1,4 @@
+// src/components/Navbar.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
@@ -11,13 +12,11 @@ import { supabase } from '../supabase';
 function Navbar({ onLogout }) {
   const [showWorkout, setShowWorkout] = useState(false);
   const [showScheduleTable, setShowScheduleTable] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [calendarRefreshKey, setCalendarRefreshKey] = useState(0);
   const [user, setUser] = useState(null);
   const [workouts, setWorkouts] = useState([]);
-  const [showCalendar, setShowCalendar] = useState(false);
 
-
-
-  // Зареждане на логнатия потребител
   useEffect(() => {
     const fetchUser = async () => {
       const { data } = await supabase.auth.getUser();
@@ -26,7 +25,6 @@ function Navbar({ onLogout }) {
     fetchUser();
   }, []);
 
-  // Зареждане на тренировките и упражненията
   useEffect(() => {
     const fetchWorkouts = async () => {
       if (!user) return;
@@ -43,14 +41,14 @@ function Navbar({ onLogout }) {
 
       const workoutsWithExercises = await Promise.all(
         workoutsData.map(async (workout) => {
-          const { data: exercisesData, error: exercisesError } = await supabase
+          const { data: exercisesData } = await supabase
             .from('exercises')
             .select('*')
             .eq('workout_id', workout.id);
 
           return {
             ...workout,
-            exercises: exercisesError ? [] : exercisesData,
+            exercises: exercisesData || [],
           };
         })
       );
@@ -81,29 +79,22 @@ function Navbar({ onLogout }) {
             </Link>
           </li>
           <li>
-  <button
-    className="navbar-link"
-    onClick={() => setShowCalendar(true)}
-  >
-    <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight: '8px', color: 'white' }} />
-    Календар
-  </button>
-</li>
-
+            <button className="navbar-link" onClick={() => {
+              setCalendarRefreshKey(prev => prev + 1);
+              setShowCalendar(true);
+            }}>
+              <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight: '8px', color: 'white' }} />
+              Календар
+            </button>
+          </li>
           <li>
-            <button
-              className="navbar-link"
-              onClick={() => setShowWorkout(true)}
-            >
+            <button className="navbar-link" onClick={() => setShowWorkout(true)}>
               <FontAwesomeIcon icon={faDumbbell} style={{ marginRight: '8px', color: 'white' }} />
               Тренировки
             </button>
           </li>
           <li>
-            <button
-              className="navbar-link"
-              onClick={() => setShowScheduleTable(true)}
-            >
+            <button className="navbar-link" onClick={() => setShowScheduleTable(true)}>
               <FontAwesomeIcon icon={faTable} style={{ marginRight: '8px', color: 'white' }} />
               Тренировъчен график
             </button>
@@ -111,9 +102,7 @@ function Navbar({ onLogout }) {
           {user && (
             <>
               <li>
-                <span className="navbar-user">
-                  Добре дошли, {user.email || 'Потребител'}!
-                </span>
+                <span className="navbar-user">Добре дошли, {user.email || 'Потребител'}!</span>
               </li>
               <li>
                 <button className="navbar-link logout-button" onClick={handleLogout}>
@@ -141,7 +130,13 @@ function Navbar({ onLogout }) {
           <WorkoutScheduleTable user={user} />
         </div>
       )}
-      
+
+      {showCalendar && (
+        <WorkoutSchedule
+          onClose={() => setShowCalendar(false)}
+          refreshTrigger={calendarRefreshKey}
+        />
+      )}
     </div>
   );
 }

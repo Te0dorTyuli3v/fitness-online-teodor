@@ -1,16 +1,16 @@
+
 import React, { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../supabase';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './WorkoutSchedule.css';
 
-function WorkoutSchedule({ onClose }) {
+function WorkoutSchedule({ onClose, refreshTrigger }) {
   const [workouts, setWorkouts] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [user, setUser] = useState(null);
 
-  // 🔁 Зареждане на потребител
   useEffect(() => {
     const fetchUser = async () => {
       const { data, error } = await supabase.auth.getUser();
@@ -20,7 +20,6 @@ function WorkoutSchedule({ onClose }) {
     fetchUser();
   }, []);
 
-  // 🔄 Зареждане на графика
   const fetchWorkouts = useCallback(async () => {
     if (!user) return;
 
@@ -33,20 +32,18 @@ function WorkoutSchedule({ onClose }) {
     if (error) {
       console.error('Грешка при зареждане на графика:', error.message);
     } else {
-      setWorkouts(data.filter((w) => w.date)); // ⛔ изключи празни дати
+      setWorkouts(data.filter((w) => w.date));
     }
   }, [user]);
 
   useEffect(() => {
     fetchWorkouts();
-  }, [fetchWorkouts]);
+  }, [fetchWorkouts, refreshTrigger]);
 
   const tileClassName = ({ date, view }) => {
     if (view === 'month') {
-      // Тук създаваме дата без time zone ефект
       const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
       const formattedDate = localDate.toISOString().split('T')[0];
-  
       const workout = workouts.find((w) => w.date === formattedDate);
       if (workout) {
         return workout.type === 'тренировъчен' ? 'training-day' : 'rest-day';
@@ -54,7 +51,6 @@ function WorkoutSchedule({ onClose }) {
     }
     return null;
   };
-  
 
   return (
     <div className="workout-schedule-container">
@@ -81,11 +77,9 @@ function WorkoutSchedule({ onClose }) {
               const localValue = new Date(value.getTime() - value.getTimezoneOffset() * 60000);
               const clickedDate = localValue.toISOString().split('T')[0];
               const workout = workouts.find((w) => w.date === clickedDate);
-            
               setSelectedDate(clickedDate);
               setSelectedWorkout(workout || null);
             }}
-            
           />
         </div>
       </div>
