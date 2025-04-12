@@ -10,7 +10,6 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, user }) {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-
   const handleNextWorkout = () => {
     if (workouts.length > 0) {
       setCurrentWorkoutIndex((prevIndex) => (prevIndex + 1) % workouts.length);
@@ -45,89 +44,97 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, user }) {
 
   const addNewExercise = () => {
     const { name, reps, sets } = newExercise;
-  
     if (!name.trim() || !reps.trim() || !sets.trim()) {
       setErrorMessage('Моля, попълнете всички полета.');
       return;
     }
-  
     if (isNaN(reps) || isNaN(sets)) {
       setErrorMessage('Повторенията и сериите трябва да са числа.');
       return;
     }
-  
+
     const updatedExercises = [...(editedWorkout?.exercises || []), newExercise];
-  
+
     setEditedWorkout((prev) => ({
       ...prev,
-      exercises: updatedExercises,  // 🟢 ъпдейтнат списък
+      exercises: updatedExercises,
     }));
-  
+
     setNewExercise({ name: '', reps: '', sets: '' });
     setErrorMessage('');
   };
-  
 
   const saveEditedWorkout = async () => {
     if (!editedWorkout || !user) return;
-
+  
     let workoutId = editedWorkout.id;
-
-    // Ако е нова тренировка - създай я в Supabase
-    if (!workoutId) {
+    const isNew = !workoutId;
+  
+    // 🆕 Създай нова тренировка
+    if (isNew) {
       const { data, error } = await supabase
         .from('workouts')
         .insert([{ title: editedWorkout.title, user_id: user.id }])
         .select()
         .single();
-
-      if (error) {
-        console.error('Грешка при създаване на тренировка:', error.message);
+  
+      if (error || !data) {
+        console.error('Грешка при създаване на тренировка:', error?.message);
         return;
       }
-
+  
       workoutId = data.id;
+      editedWorkout.id = workoutId; // задаваме ID-то, за да вържем упражненията
     } else {
-      // Обнови заглавието в Supabase
+      // ✏️ Обнови заглавието и изтрий старите упражнения
       await supabase
         .from('workouts')
         .update({ title: editedWorkout.title })
         .eq('id', workoutId);
-
-      // Изтрий старите упражнения
+  
       await supabase.from('exercises').delete().eq('workout_id', workoutId);
     }
-
-    // Вмъкни новите упражнения
-    const exercisesToInsert = editedWorkout.exercises.map((ex) => ({
+  
+    // 💪 Добави упражнения
+    const exercisesToInsert = (editedWorkout.exercises || []).map((ex) => ({
       workout_id: workoutId,
       name: ex.name,
       reps: ex.reps,
       sets: ex.sets,
     }));
-
+  
     if (exercisesToInsert.length > 0) {
-      await supabase.from('exercises').insert(exercisesToInsert);
+      const { error: insertErr } = await supabase.from('exercises').insert(exercisesToInsert);
+      if (insertErr) {
+        console.error('Грешка при запис на упражнения:', insertErr.message);
+      }
     }
-
+  
     const savedWorkout = { ...editedWorkout, id: workoutId };
+  
+    // 🔁 Обнови списъка
+    let updatedWorkouts;
 
-    const updatedWorkouts = [...workouts];
-    if (editedWorkout.id) {
-      // съществуваща тренировка
-      updatedWorkouts[currentWorkoutIndex] = savedWorkout;
-    } else {
-      // нова тренировка
-      updatedWorkouts.push(savedWorkout);
-    }
+const existingIndex = workouts.findIndex((w) => w.id === workoutId);
 
+if (existingIndex !== -1) {
+  updatedWorkouts = [...workouts];
+  updatedWorkouts[existingIndex] = savedWorkout;
+} else {
+  updatedWorkouts = [...workouts, savedWorkout];
+}
+
+  
     setWorkouts(updatedWorkouts);
     setCurrentWorkoutIndex(updatedWorkouts.length - 1);
     setEditMode(false);
     setSuccessMessage('Успешно запазено ✅');
     setTimeout(() => setSuccessMessage(''), 3000);
   };
-
+  
+  
+  
+  
   const createNewWorkout = () => {
     const newWorkout = {
       title: `Нова тренировка ${workouts.length + 1}`,
@@ -139,16 +146,26 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, user }) {
 
   const deleteWorkout = async () => {
     const workout = workouts[currentWorkoutIndex];
-    if (workout.id) {
+  
+    if (workout?.id) {
       await supabase.from('exercises').delete().eq('workout_id', workout.id);
       await supabase.from('workouts').delete().eq('id', workout.id);
     }
-
+  
     const updated = workouts.filter((_, idx) => idx !== currentWorkoutIndex);
+  
     setWorkouts(updated);
-    setCurrentWorkoutIndex(0);
     setEditMode(false);
+    setEditedWorkout(null);
+  
+    if (updated.length > 0) {
+      setCurrentWorkoutIndex(0);
+    } else {
+      // Ако няма останали тренировки – затвори модала или не показвай нищо
+      setCurrentWorkoutIndex(0);
+    }
   };
+  
 
   return (
     <>
@@ -156,6 +173,7 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, user }) {
       <div className="workout-modal">
         <button className="close-button" onClick={onClose}>X</button>
         {successMessage && <div className="success-message">{successMessage}</div>}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
 
         {!editMode ? (
           <>
@@ -213,43 +231,23 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, user }) {
                   <tr key={i}>
                     <td>{i + 1}</td>
                     <td>
-                      <input
-                        value={ex.name}
-                        onChange={(e) => handleExerciseChange(i, 'name', e.target.value)}
-                      />
+                      <input value={ex.name} onChange={(e) => handleExerciseChange(i, 'name', e.target.value)} />
                     </td>
                     <td>
-                      <input
-                        value={ex.reps}
-                        onChange={(e) => handleExerciseChange(i, 'reps', e.target.value)}
-                      />
+                      <input value={ex.reps} onChange={(e) => handleExerciseChange(i, 'reps', e.target.value)} />
                     </td>
                     <td>
-                      <input
-                        value={ex.sets}
-                        onChange={(e) => handleExerciseChange(i, 'sets', e.target.value)}
-                      />
+                      <input value={ex.sets} onChange={(e) => handleExerciseChange(i, 'sets', e.target.value)} />
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+
             <div className="new-exercise-inputs">
-              <input
-                placeholder="Упражнение"
-                value={newExercise.name}
-                onChange={(e) => setNewExercise({ ...newExercise, name: e.target.value })}
-              />
-              <input
-                placeholder="Повт"
-                value={newExercise.reps}
-                onChange={(e) => setNewExercise({ ...newExercise, reps: e.target.value })}
-              />
-              <input
-                placeholder="Серии"
-                value={newExercise.sets}
-                onChange={(e) => setNewExercise({ ...newExercise, sets: e.target.value })}
-              />
+              <input placeholder="Упражнение" value={newExercise.name} onChange={(e) => setNewExercise({ ...newExercise, name: e.target.value })} />
+              <input placeholder="Повт" value={newExercise.reps} onChange={(e) => setNewExercise({ ...newExercise, reps: e.target.value })} />
+              <input placeholder="Серии" value={newExercise.sets} onChange={(e) => setNewExercise({ ...newExercise, sets: e.target.value })} />
               <button onClick={addNewExercise}>Добави</button>
             </div>
             <button className="save-button" onClick={saveEditedWorkout}>Запази</button>
@@ -261,5 +259,3 @@ function WorkoutList({ workouts = [], setWorkouts, onClose, user }) {
 }
 
 export default WorkoutList;
-
-

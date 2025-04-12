@@ -1,0 +1,106 @@
+.exercises-container {
+     background-color: #f9f9f9;
+     padding: 20px;
+     border-radius: 10px;
+     max-width: 600px;
+     margin: auto;
+     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+   }
+   
+   .exercises-container h2 {
+     text-align: center;
+     margin-bottom: 20px;
+     color: #6b0000;
+   }
+   
+   .exercises-container table {
+     width: 100%;
+     table-layout: auto;
+     border-collapse: collapse;
+   }
+   
+   .exercises-container td, .exercises-container th {
+     padding: 10px;
+     border: 1px solid #ccc;
+     text-align: center;
+   }
+   
+   
+   .exercises-container th {
+     background-color: #eee;
+   }
+   
+   .exercises-container input {
+     margin: 5px;
+     padding: 8px;
+     width: 100px;
+     border-radius: 5px;
+     border: 1px solid #ccc;
+   }
+   
+   .exercises-container button {
+     background-color: #3f7d3f;
+     color: white;
+     padding: 10px 15px;
+     border: none;
+     border-radius: 6px;
+     cursor: pointer;
+     margin-top: 10px;
+     transition: background 0.3s ease;
+   }
+   
+   .exercises-container button:hover {
+     background-color: #2f5f2f;
+   }
+   
+   .delete-btn {
+     background-color: #aa2e2e;
+     color: white;
+     padding: 6px 10px;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+   }
+   
+   .delete-btn:hover {
+     background-color: #821d1d;
+   }
+
+   .create-workout-btn {
+     background-color: #6b0000;
+     color: white;
+     padding: 10px 20px;
+     border: none;
+     margin: 10px 0 20px;
+     border-radius: 5px;
+     cursor: pointer;
+   }
+   
+   .create-workout-btn:hover {
+     background-color: #8b0000;
+   }
+
+   .dropdown {
+     margin-bottom: 15px;
+     padding: 8px;
+     width: 100%;
+     border-radius: 5px;
+     border: 1px solid #ccc;
+   }
+
+   .create-btn {
+     padding: 8px 12px;
+     background-color: #6b0000;
+     color: white;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+   }
+   
+   .create-btn:hover {
+     background-color: #510000;
+   }
+   
+   
+   
+   

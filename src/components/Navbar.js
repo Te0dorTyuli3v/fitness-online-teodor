@@ -6,6 +6,7 @@ import { faDumbbell, faCalendarAlt, faHome, faSignOutAlt, faTable } from '@forta
 import WorkoutList from './WorkoutList';
 import WorkoutScheduleTable from './WorkoutScheduleTable';
 import WorkoutSchedule from './WorkoutSchedule';
+import ExercisesManager from './ExercisesManager';
 import { supabase } from '../supabase';
 
 function Navbar({ onLogout }) {
@@ -15,6 +16,7 @@ function Navbar({ onLogout }) {
   const [calendarRefreshKey, setCalendarRefreshKey] = useState(0);
   const [user, setUser] = useState(null);
   const [workouts, setWorkouts] = useState([]);
+  const [showExercises, setShowExercises] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -87,11 +89,12 @@ function Navbar({ onLogout }) {
             </button>
           </li>
           <li>
-            <button className="navbar-link" onClick={() => setShowWorkout(true)}>
-              <FontAwesomeIcon icon={faDumbbell} style={{ marginRight: '8px', color: 'white' }} />
-              Тренировки
-            </button>
-          </li>
+  <button className="navbar-link" onClick={() => setShowExercises(true)}>
+    <FontAwesomeIcon icon={faDumbbell} style={{ marginRight: '8px', color: 'white' }} />
+    Тренировъчни упражнения
+  </button>
+</li>
+
           <li>
             <button className="navbar-link" onClick={() => setShowScheduleTable(true)}>
               <FontAwesomeIcon icon={faTable} style={{ marginRight: '8px', color: 'white' }} />
@@ -136,6 +139,13 @@ function Navbar({ onLogout }) {
           refreshTrigger={calendarRefreshKey}
         />
       )}
+
+      {showExercises && (
+  <div className="schedule-table-modal">
+    <button className="close-button" onClick={() => setShowExercises(false)}>X</button>
+    <ExercisesManager user={user} />
+  </div>
+)}
     </div>
   );
 }

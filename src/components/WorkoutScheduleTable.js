@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabase';
 import './WorkoutScheduleTable.css';
 
-
 function WorkoutScheduleTable({ user }) {
   const [schedule, setSchedule] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
-  const [newEntry, setNewEntry] = useState({ date: '', type: 'тренировъчен', note: '' });
+  const [newEntry, setNewEntry] = useState({ date: '', type: 'тренировъчен', note: '', workout_id: '' });
+  const [userWorkouts, setUserWorkouts] = useState([]);
 
   const fetchSchedule = async () => {
     const { data, error } = await supabase
@@ -19,8 +19,22 @@ function WorkoutScheduleTable({ user }) {
     else setSchedule(data);
   };
 
+  const fetchUserWorkouts = async () => {
+    const { data, error } = await supabase
+      .from('workouts')
+      .select('id, title')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: true });
+
+    if (error) console.error('Грешка при зареждане на тренировки:', error.message);
+    else setUserWorkouts(data);
+  };
+
   useEffect(() => {
-    if (user) fetchSchedule();
+    if (user) {
+      fetchSchedule();
+      fetchUserWorkouts();
+    }
   }, [user]);
 
   const handleInputChange = (e, field, index = null) => {
@@ -40,7 +54,7 @@ function WorkoutScheduleTable({ user }) {
     ]);
     if (error) console.error('Грешка при създаване:', error.message);
     else {
-      setNewEntry({ date: '', type: 'тренировъчен', note: '' });
+      setNewEntry({ date: '', type: 'тренировъчен', note: '', workout_id: '' });
       fetchSchedule();
     }
   };
@@ -49,7 +63,7 @@ function WorkoutScheduleTable({ user }) {
     const entry = schedule[index];
     const { error } = await supabase
       .from('daily_workouts')
-      .update({ date: entry.date, type: entry.type, note: entry.note })
+      .update({ date: entry.date, type: entry.type, note: entry.note, workout_id: entry.workout_id })
       .eq('id', entry.id);
 
     if (error) console.error('Грешка при обновяване:', error.message);
@@ -75,6 +89,7 @@ function WorkoutScheduleTable({ user }) {
             <th>Дата</th>
             <th>Тип</th>
             <th>Вид тренировка</th>
+            <th>Свързана тренировка</th>
             <th>Действия</th>
           </tr>
         </thead>
@@ -118,6 +133,21 @@ function WorkoutScheduleTable({ user }) {
               </td>
               <td>
                 {editingIndex === index ? (
+                  <select
+                    value={entry.workout_id || ''}
+                    onChange={(e) => handleInputChange(e, 'workout_id', index)}
+                  >
+                    <option value="">Няма</option>
+                    {userWorkouts.map(w => (
+                      <option key={w.id} value={w.id}>{w.title}</option>
+                    ))}
+                  </select>
+                ) : (
+                  userWorkouts.find(w => w.id === entry.workout_id)?.title || 'Няма'
+                )}
+              </td>
+              <td>
+                {editingIndex === index ? (
                   <>
                     <button onClick={() => updateEntry(index)}>Запази</button>
                     <button className="cancel-button" onClick={() => setEditingIndex(null)}>Откажи</button>
@@ -156,7 +186,18 @@ function WorkoutScheduleTable({ user }) {
               />
             </td>
             <td>
-            <button className="add-button" onClick={addEntry}>Добави</button>
+              <select
+                value={newEntry.workout_id}
+                onChange={(e) => handleInputChange(e, 'workout_id')}
+              >
+                <option value="">Няма</option>
+                {userWorkouts.map(w => (
+                  <option key={w.id} value={w.id}>{w.title}</option>
+                ))}
+              </select>
+            </td>
+            <td>
+              <button className="add-button" onClick={addEntry}>Добави</button>
             </td>
           </tr>
         </tbody>

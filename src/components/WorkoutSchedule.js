@@ -9,6 +9,7 @@ function WorkoutSchedule({ onClose, refreshTrigger }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [user, setUser] = useState(null);
+  const [selectedExercises, setSelectedExercises] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -34,6 +35,15 @@ function WorkoutSchedule({ onClose, refreshTrigger }) {
       setWorkouts(data.filter((w) => w.date));
     }
   }, [user]);
+
+  const fetchExercises = async (workoutId) => {
+    const { data, error } = await supabase
+      .from('exercises')
+      .select('*')
+      .eq('workout_id', workoutId);
+    if (!error) setSelectedExercises(data);
+    else setSelectedExercises([]);
+  };
 
   useEffect(() => {
     fetchWorkouts();
@@ -64,6 +74,20 @@ function WorkoutSchedule({ onClose, refreshTrigger }) {
                 <>
                   <p><strong>Тип:</strong> {selectedWorkout.type}</p>
                   <p><strong>Бележка:</strong> {selectedWorkout.note || 'няма бележка'}</p>
+                  {selectedExercises.length > 0 ? (
+                    <>
+                      <p><strong>Упражнения:</strong></p>
+                      <ul>
+                        {selectedExercises.map((ex) => (
+                          <li key={ex.id}>
+                            {ex.name} – {ex.reps} повт. / {ex.sets} серии
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    <p>Няма упражнения за тази тренировка.</p>
+                  )}
                 </>
               ) : (
                 <p>Няма въведена тренировка за тази дата.</p>
@@ -78,6 +102,11 @@ function WorkoutSchedule({ onClose, refreshTrigger }) {
               const workout = workouts.find((w) => w.date === clickedDate);
               setSelectedDate(clickedDate);
               setSelectedWorkout(workout || null);
+              if (workout?.workout_id) {
+                fetchExercises(workout.workout_id);
+              } else {
+                setSelectedExercises([]);
+              }
             }}
           />
         </div>
