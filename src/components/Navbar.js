@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDumbbell, faCalendarAlt, faHome, faSignOutAlt, faTable } from '@fortawesome/free-solid-svg-icons';
-import WorkoutList from './WorkoutList';
 import WorkoutScheduleTable from './WorkoutScheduleTable';
 import WorkoutSchedule from './WorkoutSchedule';
 import ExercisesManager from './ExercisesManager';
 import { supabase } from '../supabase';
 
 function Navbar({ onLogout }) {
-  const [showWorkout, setShowWorkout] = useState(false);
+  const [user, setUser] = useState(null);
   const [showScheduleTable, setShowScheduleTable] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [calendarRefreshKey, setCalendarRefreshKey] = useState(0);
-  const [user, setUser] = useState(null);
-  const [workouts, setWorkouts] = useState([]);
   const [showExercises, setShowExercises] = useState(false);
+  const [calendarRefreshKey, setCalendarRefreshKey] = useState(0);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,46 +24,10 @@ function Navbar({ onLogout }) {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    const fetchWorkouts = async () => {
-      if (!user) return;
-
-      const { data: workoutsData, error: workoutsError } = await supabase
-        .from('workouts')
-        .select('*')
-        .eq('user_id', user.id);
-
-      if (workoutsError) {
-        console.error('Грешка при зареждане на тренировките:', workoutsError.message);
-        return;
-      }
-
-      const workoutsWithExercises = await Promise.all(
-        workoutsData.map(async (workout) => {
-          const { data: exercisesData } = await supabase
-            .from('exercises')
-            .select('*')
-            .eq('workout_id', workout.id);
-
-          return {
-            ...workout,
-            exercises: exercisesData || [],
-          };
-        })
-      );
-
-      setWorkouts(workoutsWithExercises);
-    };
-
-    fetchWorkouts();
-  }, [user]);
-
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      setUser(null);
-      if (onLogout) onLogout();
-    }
+    await supabase.auth.signOut();
+    setUser(null);
+    if (onLogout) onLogout();
   };
 
   return (
@@ -81,20 +43,19 @@ function Navbar({ onLogout }) {
           </li>
           <li>
             <button className="navbar-link" onClick={() => {
-              setCalendarRefreshKey(prev => prev + 1);
               setShowCalendar(true);
+              setCalendarRefreshKey(prev => prev + 1);
             }}>
               <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight: '8px', color: 'white' }} />
               Календар
             </button>
           </li>
           <li>
-  <button className="navbar-link" onClick={() => setShowExercises(true)}>
-    <FontAwesomeIcon icon={faDumbbell} style={{ marginRight: '8px', color: 'white' }} />
-    Тренировъчни упражнения
-  </button>
-</li>
-
+            <button className="navbar-link" onClick={() => setShowExercises(true)}>
+              <FontAwesomeIcon icon={faDumbbell} style={{ marginRight: '8px', color: 'white' }} />
+              Тренировъчни упражнения
+            </button>
+          </li>
           <li>
             <button className="navbar-link" onClick={() => setShowScheduleTable(true)}>
               <FontAwesomeIcon icon={faTable} style={{ marginRight: '8px', color: 'white' }} />
@@ -104,7 +65,7 @@ function Navbar({ onLogout }) {
           {user && (
             <>
               <li>
-                <span className="navbar-user">Добре дошли, {user.email || 'Потребител'}!</span>
+                <span className="navbar-user">Добре дошли, {user.email}!</span>
               </li>
               <li>
                 <button className="navbar-link logout-button" onClick={handleLogout}>
@@ -117,13 +78,12 @@ function Navbar({ onLogout }) {
         </ul>
       </nav>
 
-      {showWorkout && (
-        <WorkoutList
-          workouts={workouts}
-          setWorkouts={setWorkouts}
-          onClose={() => setShowWorkout(false)}
-          user={user}
-        />
+      {/* MODALS */}
+      {showCalendar && (
+        <div className="schedule-table-modal">
+          <button className="close-button" onClick={() => setShowCalendar(false)}>X</button>
+          <WorkoutSchedule onClose={() => setShowCalendar(false)} refreshTrigger={calendarRefreshKey} />
+        </div>
       )}
 
       {showScheduleTable && (
@@ -133,19 +93,12 @@ function Navbar({ onLogout }) {
         </div>
       )}
 
-      {showCalendar && (
-        <WorkoutSchedule
-          onClose={() => setShowCalendar(false)}
-          refreshTrigger={calendarRefreshKey}
-        />
-      )}
-
       {showExercises && (
-  <div className="schedule-table-modal">
-    <button className="close-button" onClick={() => setShowExercises(false)}>X</button>
-    <ExercisesManager user={user} />
-  </div>
-)}
+        <div className="schedule-table-modal">
+          <button className="close-button" onClick={() => setShowExercises(false)}>X</button>
+          <ExercisesManager user={user} />
+        </div>
+      )}
     </div>
   );
 }

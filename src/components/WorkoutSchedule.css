@@ -2,17 +2,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgba(202, 183, 183, 0.4);
+  background-color: rgba(229, 199, 199, 0.5);
   border-radius: 20px;
   padding: 40px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(109, 26, 26, 0.4);
   margin-bottom: 0;
   padding-bottom: 0;
 }
 
    
    .workout-schedule-container h2 {
-     color: #561e1e;
+     color: #571f1f;
      margin-bottom: 40px;
    }
    
@@ -21,7 +21,7 @@
      max-width: 400px;
      border: none;
      border-radius: 10px;
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+     box-shadow: 0 4px 8px rgba(11, 11, 11, 0.1);
    }
    
    .training-day {
@@ -36,7 +36,7 @@
   
   .react-calendar__tile--now {
     background-color: #939390 !important; 
-    color: black !important;
+    color: rgb(8, 8, 8) !important;
     font-weight: bold;
   }
   

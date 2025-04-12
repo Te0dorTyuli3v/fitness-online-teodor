@@ -5,7 +5,7 @@ import './WorkoutScheduleTable.css';
 function WorkoutScheduleTable({ user }) {
   const [schedule, setSchedule] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
-  const [newEntry, setNewEntry] = useState({ date: '', type: 'тренировъчен', note: '', workout_id: '' });
+  const [newEntry, setNewEntry] = useState({ date: '', type: 'тренировъчен', note: '', workout_id: 'none' });
   const [userWorkouts, setUserWorkouts] = useState([]);
 
   const fetchSchedule = async () => {
