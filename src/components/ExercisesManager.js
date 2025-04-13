@@ -21,7 +21,7 @@ function ExercisesManager({ user }) {
       setWorkouts(data);
       if (data.length > 0) {
           setWorkouts(data);
-          setSelectedWorkoutId(data[0].id);
+        setSelectedWorkoutId(data[0].id);
       }
     }
   }, [user]);
@@ -76,7 +76,22 @@ function ExercisesManager({ user }) {
       console.error('Грешка при създаване на тренировка:', insertError?.message);
     }
   };
-
+  const handleDeleteWorkout = async (id) => {
+     const confirm = window.confirm("Сигурни ли сте, че искате да изтриете тази тренировка?");
+     if (!confirm) return;
+   
+     const { error } = await supabase.from('workouts').delete().eq('id', id);
+     if (!error) {
+       setWorkouts(prev => prev.filter(w => w.id !== id));
+       if (id === selectedWorkoutId) {
+         setSelectedWorkoutId(''); // Ако е текущата, махаме избора
+         setExercises([]); // И изчистваме упражненията
+       }
+     } else {
+       console.error('Грешка при изтриване на тренировка:', error.message);
+     }
+   };
+   
   // Добавяне на упражнение
   const addExercise = async () => {
      if (!selectedWorkoutId) {
@@ -135,6 +150,25 @@ function ExercisesManager({ user }) {
         </select>
         <button onClick={createWorkout} className="create-btn">Създай нова тренировка</button>
       </div>
+
+      {/* Списък с тренировки и бутон за изтриване */}
+    <div style={{ marginTop: '10px' }}>
+      <h4>Моите тренировки:</h4>
+      <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
+         {workouts.map((workout) => (
+       <li key={workout.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
+        <span>{workout.title}</span>
+        <button
+          style={{ marginLeft: '10px', background: '#8b0000', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 10px', cursor: 'pointer' }}
+          onClick={() => handleDeleteWorkout(workout.id)}
+        >
+          Изтрий
+        </button>
+      </li>
+    ))}
+  </ul>
+</div>
+
 
       {exercises.length === 0 ? (
         <p style={{ textAlign: 'center' }}>Няма упражнения за тази тренировка.</p>

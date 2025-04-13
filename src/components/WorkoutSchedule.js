@@ -63,7 +63,6 @@ function WorkoutSchedule({ onClose, refreshTrigger }) {
 
   return (
     <div className="workout-schedule-container">
-      <button className="calendar-close-button" onClick={onClose}>X</button>
       <h2>Календар</h2>
       <div className="calendar-and-graph">
         <div className="calendar-section">

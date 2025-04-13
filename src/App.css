@@ -181,7 +181,7 @@ body {
 }
 
 .homepage-title {
-  color: #9a9797; /* Бледо сиво */
+  color: #ada8a8; /* Бледо сиво */
 }
 
 .homepage-text {
@@ -189,29 +189,29 @@ body {
 }
 
 .homepage-paragraph {
-  color: #ccc8c8; /* Много бледо сиво */
+  color: #cbc7c7; /* Много бледо сиво */
 }
 
 .welcome-text {
   text-align: justify;
   font-family: Arial, sans-serif;
-  font-size: 1.2rem; /* Размер на текста */
+  font-size: 1.6rem; /* Размер на текста */
   font-weight: bold; /* Удебелен текст */
   color: rgb(121, 15, 15);
   margin: 20px;
   padding: 20px;
-  background: rgba(103, 98, 98, 0.6); /* Полупрозрачен фон */
+  background: rgba(92, 86, 86, 0.6); /* Полупрозрачен фон */
   border-radius: 16px;
 }
 
 .welcome-text h2 {
-  font-size: 2rem; /* Размер на заглавието */
+  font-size: 3rem; /* Размер на заглавието */
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .welcome-text ul {
-  list-style-type: disc; /* Символ за точките в списъка */
+  list-style-type: disc; 
   padding-left: 20px;
 }
 
@@ -221,7 +221,7 @@ body {
 }
 
 .welcome-text li {
-  margin-bottom: 10px; /* Разстояние между редовете */
+  margin-bottom: 30px; /* Разстояние между редовете */
 }
 
 

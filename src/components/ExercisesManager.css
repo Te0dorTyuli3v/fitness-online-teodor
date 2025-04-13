@@ -1,11 +1,11 @@
 .exercises-container {
-     background-color: #f9f9f9;
-     padding: 20px;
-     border-radius: 10px;
-     max-width: 600px;
-     margin: auto;
-     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-   }
+  background-color: #f8eaea; /* бледо червен */
+  padding: 30px;
+  border-radius: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
    
    .exercises-container h2 {
      text-align: center;
@@ -21,13 +21,13 @@
    
    .exercises-container td, .exercises-container th {
      padding: 10px;
-     border: 1px solid #ccc;
+     border: 1px solid #b3b2b2;
      text-align: center;
    }
    
    
    .exercises-container th {
-     background-color: #eee;
+     background-color: #bfa4a4;
    }
    
    .exercises-container input {
@@ -39,7 +39,7 @@
    }
    
    .exercises-container button {
-     background-color: #3f7d3f;
+     background-color: #7cb87c;
      color: white;
      padding: 10px 15px;
      border: none;
@@ -50,12 +50,12 @@
    }
    
    .exercises-container button:hover {
-     background-color: #2f5f2f;
+     background-color: #383e38;
    }
    
    .delete-btn {
-     background-color: #aa2e2e;
-     color: white;
+     background-color: #ae2e2e;
+     color: rgb(253, 249, 249);
      padding: 6px 10px;
      border: none;
      border-radius: 5px;
