@@ -5,7 +5,7 @@ import './WorkoutScheduleTable.css';
 function WorkoutScheduleTable({ user }) {
   const [schedule, setSchedule] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
-  const [newEntry, setNewEntry] = useState({ date: '', type: 'тренировъчен', note: '', workout_id: 'none' });
+  const [newEntry, setNewEntry] = useState({ date: '', type: 'тренировъчен', note: '', workout_id: '' });
   const [userWorkouts, setUserWorkouts] = useState([]);
 
   const fetchSchedule = async () => {
@@ -49,21 +49,34 @@ function WorkoutScheduleTable({ user }) {
 
   const addEntry = async () => {
     if (!newEntry.date) return;
-    const { error } = await supabase.from('daily_workouts').insert([
-      { ...newEntry, user_id: user.id },
-    ]);
-    if (error) console.error('Грешка при създаване:', error.message);
-    else {
+  
+    const entryToInsert = {
+      ...newEntry,
+      user_id: user.id,
+      workout_id: newEntry.workout_id || null,  // 🟢 това е новото!
+    };
+  
+    const { error } = await supabase.from('daily_workouts').insert([entryToInsert]);
+  
+    if (error) {
+      console.error('Грешка при създаване:', error.message);
+    } else {
       setNewEntry({ date: '', type: 'тренировъчен', note: '', workout_id: '' });
       fetchSchedule();
     }
   };
+  
 
   const updateEntry = async (index) => {
     const entry = schedule[index];
     const { error } = await supabase
       .from('daily_workouts')
-      .update({ date: entry.date, type: entry.type, note: entry.note, workout_id: entry.workout_id })
+      .update({
+        date: entry.date,
+        type: entry.type,
+        note: entry.note,
+        workout_id: entry.workout_id || null
+      })
       .eq('id', entry.id);
 
     if (error) console.error('Грешка при обновяване:', error.message);
@@ -161,6 +174,8 @@ function WorkoutScheduleTable({ user }) {
               </td>
             </tr>
           ))}
+
+          {/* Нов запис */}
           <tr>
             <td>
               <input
