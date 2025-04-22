@@ -38,14 +38,14 @@
      border: 1px solid #ccc;
    }
    
-   .exercises-container button {
-     background-color: #7cb87c;
-     color: white;
+   
+   .exercises-container {
+     background-color: #eee3e5;
      padding: 10px 15px;
      border: none;
      border-radius: 6px;
      cursor: pointer;
-     margin-top: 10px;
+     margin-top: 0px;
      transition: background 0.3s ease;
    }
    
@@ -54,7 +54,7 @@
    }
    
    .delete-btn {
-     background-color: #ae2e2e;
+     background-color: #b34444;
      color: rgb(253, 249, 249);
      padding: 6px 10px;
      border: none;
@@ -67,7 +67,7 @@
    }
 
    .create-workout-btn {
-     background-color: #6b0000;
+     background-color: #a31c1c;
      color: white;
      padding: 10px 20px;
      border: none;
@@ -90,7 +90,7 @@
 
    .create-btn {
      padding: 8px 12px;
-     background-color: #6b0000;
+     background-color: #83c093;
      color: white;
      border: none;
      border-radius: 5px;

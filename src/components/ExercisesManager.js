@@ -63,7 +63,7 @@ function ExercisesManager({ user }) {
 
     const { data: newWorkout, error: insertError } = await supabase
       .from('workouts')
-      .insert([{ title: `Моята тренировка ${count + 1}`, user_id: user.id }])
+      .insert([{ title: `Тренировка ${count + 1}`, user_id: user.id }])
       .select()
       .single();
 
@@ -158,8 +158,8 @@ function ExercisesManager({ user }) {
          {workouts.map((workout) => (
        <li key={workout.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
         <span>{workout.title}</span>
-        <button
-          style={{ marginLeft: '10px', background: '#8b0000', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 10px', cursor: 'pointer' }}
+        <button className="delete-btn" 
+          
           onClick={() => handleDeleteWorkout(workout.id)}
         >
           Изтрий
@@ -215,7 +215,7 @@ function ExercisesManager({ user }) {
         value={newExercise.sets}
         onChange={(e) => setNewExercise({ ...newExercise, sets: e.target.value })}
       />
-      <button onClick={addExercise}>Добави</button>
+      <button className="create-btn" onClick={addExercise}>Добави</button>
     </div>
   );
 }
